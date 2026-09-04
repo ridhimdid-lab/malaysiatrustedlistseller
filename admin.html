@@ -1,0 +1,2362 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>MTLS — Admin Dashboard</title>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:Arial,Helvetica,sans-serif;
+}
+
+:root{
+    --bg:#030712;
+    --card:#081120;
+    --card2:#0b1628;
+    --blue:#1683ff;
+    --blue2:#0066ff;
+    --text:#f5f7fb;
+    --muted:#8d9bb0;
+    --border:rgba(255,255,255,.08);
+    --green:#21d98b;
+    --red:#ff4d67;
+    --yellow:#ffc857;
+}
+
+body{
+    min-height:100vh;
+    background:
+        radial-gradient(circle at 10% 0%,rgba(0,102,255,.14),transparent 28%),
+        var(--bg);
+    color:var(--text);
+}
+
+/* LOGIN */
+
+.login-screen{
+    min-height:100vh;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    padding:25px;
+}
+
+.login-box{
+    width:100%;
+    max-width:420px;
+    padding:35px;
+    border:1px solid var(--border);
+    border-radius:22px;
+    background:rgba(8,17,32,.86);
+    backdrop-filter:blur(18px);
+    box-shadow:0 25px 80px rgba(0,0,0,.35);
+}
+
+.logo{
+    width:55px;
+    height:55px;
+    object-fit:contain;
+    padding:4px;
+    border-radius:15px;
+    border:1px solid rgba(22,131,255,.3);
+    margin-bottom:20px;
+}
+
+.login-box h1{
+    font-size:28px;
+    margin-bottom:7px;
+}
+
+.login-box p{
+    color:var(--muted);
+    font-size:13px;
+    margin-bottom:25px;
+}
+
+.input{
+    width:100%;
+    padding:14px 15px;
+    margin-bottom:13px;
+    border:1px solid var(--border);
+    border-radius:10px;
+    outline:none;
+    background:rgba(255,255,255,.035);
+    color:white;
+}
+
+.input:focus{
+    border-color:rgba(22,131,255,.55);
+}
+
+.btn{
+    width:100%;
+    padding:14px;
+    border:0;
+    border-radius:10px;
+    background:linear-gradient(135deg,#1683ff,#005ce6);
+    color:white;
+    font-weight:800;
+    cursor:pointer;
+}
+
+.error{
+    color:#ff6b7d;
+    font-size:12px;
+    margin-top:12px;
+}
+
+/* DASHBOARD */
+
+.dashboard{
+    display:none;
+}
+
+.navbar{
+    height:72px;
+    padding:0 5%;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    border-bottom:1px solid var(--border);
+    background:rgba(3,7,18,.8);
+    backdrop-filter:blur(18px);
+    position:sticky;
+    top:0;
+    z-index:100;
+}
+
+.brand{
+    display:flex;
+    align-items:center;
+    gap:11px;
+}
+
+.brand img{
+    width:40px;
+    height:40px;
+    object-fit:contain;
+    border-radius:10px;
+}
+
+.brand strong{
+    font-size:17px;
+}
+
+.brand small{
+    display:block;
+    color:var(--muted);
+    font-size:9px;
+    margin-top:2px;
+}
+
+.logout{
+    padding:9px 14px;
+    border:1px solid rgba(255,77,103,.25);
+    border-radius:9px;
+    color:#ff7082;
+    background:rgba(255,77,103,.06);
+    cursor:pointer;
+    font-weight:700;
+}
+
+.container{
+    max-width:1250px;
+    margin:auto;
+    padding:35px 5%;
+}
+
+.heading{
+    margin-bottom:28px;
+}
+
+.heading h1{
+    font-size:32px;
+}
+
+.heading p{
+    color:var(--muted);
+    margin-top:6px;
+    font-size:13px;
+}
+
+/* STATS */
+
+.stats{
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:15px;
+    margin-bottom:30px;
+}
+
+.stat{
+    padding:22px;
+    border:1px solid var(--border);
+    border-radius:16px;
+    background:rgba(255,255,255,.025);
+}
+
+.stat-label{
+    color:var(--muted);
+    font-size:11px;
+    margin-bottom:10px;
+}
+
+.stat-number{
+    font-size:27px;
+    font-weight:900;
+}
+
+/* TABS */
+
+.tabs{
+    display:flex;
+    gap:8px;
+    flex-wrap:wrap;
+    margin-bottom:20px;
+}
+
+.tab{
+    padding:10px 15px;
+    border:1px solid var(--border);
+    border-radius:9px;
+    background:rgba(255,255,255,.025);
+    color:#aeb9ca;
+    cursor:pointer;
+    font-size:12px;
+    font-weight:700;
+}
+
+.tab.active{
+    background:rgba(22,131,255,.12);
+    color:#62adff;
+    border-color:rgba(22,131,255,.3);
+}
+
+.panel{
+    display:none;
+}
+
+.panel.active{
+    display:block;
+}
+
+/* CARD */
+
+.card{
+    padding:24px;
+    border:1px solid var(--border);
+    border-radius:17px;
+    background:rgba(255,255,255,.025);
+    margin-bottom:20px;
+}
+
+.card h2{
+    font-size:18px;
+    margin-bottom:5px;
+}
+
+.card-desc{
+    color:var(--muted);
+    font-size:12px;
+    margin-bottom:20px;
+}
+
+/* FORM */
+
+.form-grid{
+    display:grid;
+    grid-template-columns:repeat(2,1fr);
+    gap:14px;
+}
+
+.field label{
+    display:block;
+    color:#aeb9ca;
+    font-size:11px;
+    font-weight:700;
+    margin-bottom:7px;
+}
+
+.field input,
+.field textarea,
+.field select{
+    width:100%;
+    padding:13px;
+    border:1px solid var(--border);
+    border-radius:9px;
+    outline:none;
+    background:#07101d;
+    color:white;
+}
+
+.field textarea{
+    min-height:100px;
+    resize:vertical;
+}
+
+.field.full{
+    grid-column:1/-1;
+}
+
+.form-actions{
+    display:flex;
+    gap:10px;
+    margin-top:17px;
+}
+
+.primary{
+    padding:12px 18px;
+    border:0;
+    border-radius:9px;
+    background:var(--blue);
+    color:white;
+    font-weight:800;
+    cursor:pointer;
+}
+
+.secondary{
+    padding:12px 18px;
+    border:1px solid var(--border);
+    border-radius:9px;
+    background:transparent;
+    color:#aeb9ca;
+    cursor:pointer;
+}
+
+/* TABLE */
+
+.table-wrap{
+    overflow-x:auto;
+}
+
+table{
+    width:100%;
+    border-collapse:collapse;
+    min-width:700px;
+}
+
+th{
+    text-align:left;
+    color:#728096;
+    font-size:10px;
+    text-transform:uppercase;
+    padding:13px;
+    border-bottom:1px solid var(--border);
+}
+
+td{
+    padding:15px 13px;
+    border-bottom:1px solid rgba(255,255,255,.05);
+    font-size:12px;
+}
+
+.badge{
+    display:inline-block;
+    padding:5px 8px;
+    border-radius:7px;
+    font-size:9px;
+    font-weight:800;
+}
+
+.verified{
+    background:rgba(22,131,255,.1);
+    color:#55aaff;
+}
+
+.trusted{
+    background:rgba(33,217,139,.09);
+    color:var(--green);
+}
+
+.suspended{
+    background:rgba(255,77,103,.09);
+    color:var(--red);
+}
+
+.actions{
+    display:flex;
+    gap:6px;
+    flex-wrap:wrap;
+}
+
+.action{
+    padding:7px 9px;
+    border:1px solid var(--border);
+    border-radius:7px;
+    background:rgba(255,255,255,.03);
+    color:#aeb9ca;
+    cursor:pointer;
+    font-size:10px;
+}
+
+.action:hover{
+    color:white;
+    border-color:rgba(22,131,255,.3);
+}
+
+.action.danger{
+    color:#ff687b;
+}
+
+/* LOG */
+
+.log{
+    padding:13px 0;
+    border-bottom:1px solid rgba(255,255,255,.05);
+}
+
+.log strong{
+    font-size:12px;
+}
+
+.log span{
+    display:block;
+    margin-top:4px;
+    color:var(--muted);
+    font-size:11px;
+}
+
+/* TOAST */
+
+.toast{
+    position:fixed;
+    right:20px;
+    bottom:20px;
+    z-index:9999;
+    padding:14px 18px;
+    border-radius:10px;
+    background:#0c1728;
+    border:1px solid var(--border);
+    box-shadow:0 15px 40px rgba(0,0,0,.35);
+    font-size:12px;
+    display:none;
+}
+
+/* MOBILE */
+
+@media(max-width:850px){
+
+    .stats{
+        grid-template-columns:repeat(2,1fr);
+    }
+
+    .form-grid{
+        grid-template-columns:1fr;
+    }
+
+    .field.full{
+        grid-column:auto;
+    }
+}
+
+@media(max-width:550px){
+
+    .stats{
+        grid-template-columns:1fr 1fr;
+    }
+
+    .container{
+        padding:25px 4%;
+    }
+
+    .login-box{
+        padding:25px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<!-- LOGIN -->
+
+<section class="login-screen" id="loginScreen">
+
+    <div class="login-box">
+
+        <img
+            class="logo"
+            src="https://i.ibb.co/qMHWZRf3/photo-6113671142116627052-y.jpg"
+            alt="MTLS"
+        >
+
+        <h1>MTLS Admin</h1>
+
+        <p>
+            Sign in with your authorized MTLS admin account.
+        </p>
+
+        <form id="loginForm">
+
+            <input
+                id="email"
+                class="input"
+                type="email"
+                placeholder="Admin email"
+                required
+            >
+
+            <input
+                id="password"
+                class="input"
+                type="password"
+                placeholder="Password"
+                required
+            >
+
+            <button
+                class="btn"
+                type="submit"
+                id="loginBtn"
+            >
+                SIGN IN
+            </button>
+
+            <div
+                class="error"
+                id="loginError"
+            ></div>
+
+        </form>
+
+    </div>
+
+</section>
+
+
+<!-- DASHBOARD -->
+
+<section class="dashboard" id="dashboard">
+
+    <nav class="navbar">
+
+        <div class="brand">
+
+            <img
+                src="https://i.ibb.co/qMHWZRf3/photo-6113671142116627052-y.jpg"
+                alt="MTLS"
+            >
+
+            <div>
+                <strong>MTLS Admin</strong>
+                <small id="adminRole">ADMIN</small>
+            </div>
+
+        </div>
+
+        <button
+            class="logout"
+            onclick="logout()"
+        >
+            Logout
+        </button>
+
+    </nav>
+
+
+    <main class="container">
+
+        <div class="heading">
+
+            <h1>Dashboard</h1>
+
+            <p>
+                Manage MTLS members, admins, reviews and audit logs.
+            </p>
+
+        </div>
+
+
+        <!-- STATS -->
+
+        <div class="stats">
+
+            <div class="stat">
+
+                <div class="stat-label">
+                    TOTAL MEMBERS
+                </div>
+
+                <div
+                    class="stat-number"
+                    id="totalMembers"
+                >
+                    0
+                </div>
+
+            </div>
+
+
+            <div class="stat">
+
+                <div class="stat-label">
+                    VERIFIED
+                </div>
+
+                <div
+                    class="stat-number"
+                    id="totalVerified"
+                >
+                    0
+                </div>
+
+            </div>
+
+
+            <div class="stat">
+
+                <div class="stat-label">
+                    TRUSTED
+                </div>
+
+                <div
+                    class="stat-number"
+                    id="totalTrusted"
+                >
+                    0
+                </div>
+
+            </div>
+
+
+            <div class="stat">
+
+                <div class="stat-label">
+                    REVIEWS
+                </div>
+
+                <div
+                    class="stat-number"
+                    id="totalReviews"
+                >
+                    0
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- TABS -->
+
+        <div class="tabs">
+
+            <button
+                class="tab active"
+                onclick="showTab('members',this)"
+            >
+                Members
+            </button>
+
+            <button
+                class="tab"
+                onclick="showTab('addMember',this)"
+            >
+                Add Member
+            </button>
+
+            <button
+                class="tab"
+                onclick="showTab('admins',this)"
+            >
+                Admins
+            </button>
+
+            <button
+                class="tab"
+                onclick="showTab('reviews',this)"
+            >
+                Reviews
+            </button>
+
+            <button
+                class="tab"
+                onclick="showTab('logs',this)"
+            >
+                Audit Logs
+            </button>
+
+        </div>
+
+
+        <!-- MEMBERS -->
+
+        <div
+            class="panel active"
+            id="members"
+        >
+
+            <div class="card">
+
+                <h2>Members</h2>
+
+                <p class="card-desc">
+                    Manage trusted list members.
+                </p>
+
+                <div class="table-wrap">
+
+                    <table>
+
+                        <thead>
+
+                            <tr>
+                                <th>Username</th>
+                                <th>Role</th>
+                                <th>Status</th>
+                                <th>Verified</th>
+                                <th>Actions</th>
+                            </tr>
+
+                        </thead>
+
+                        <tbody id="membersTable">
+
+                            <tr>
+                                <td colspan="5">
+                                    Loading...
+                                </td>
+                            </tr>
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- ADD MEMBER -->
+
+        <div
+            class="panel"
+            id="addMember"
+        >
+
+            <div class="card">
+
+                <h2>Add Member</h2>
+
+                <p class="card-desc">
+                    Create a new MTLS trusted list profile.
+                </p>
+
+                <form id="memberForm">
+
+                    <input
+                        type="hidden"
+                        id="editingId"
+                    >
+
+                    <div class="form-grid">
+
+                        <div class="field">
+
+                            <label>
+                                Username
+                            </label>
+
+                            <input
+                                id="username"
+                                required
+                                placeholder="Example: luffy"
+                            >
+
+                        </div>
+
+
+                        <div class="field">
+
+                            <label>
+                                Display Name
+                            </label>
+
+                            <input
+                                id="displayName"
+                                required
+                                placeholder="Example: Luffy Store"
+                            >
+
+                        </div>
+
+
+                        <div class="field">
+
+                            <label>
+                                Role
+                            </label>
+
+                            <select id="role">
+
+                                <option value="MEMBER">
+                                    MEMBER
+                                </option>
+
+                                <option value="ADMIN">
+                                    ADMIN
+                                </option>
+
+                                <option value="OWNER">
+                                    OWNER
+                                </option>
+
+                                <option value="PARTNER">
+                                    PARTNER
+                                </option>
+
+                            </select>
+
+                        </div>
+
+
+                        <div class="field">
+
+                            <label>
+                                WhatsApp
+                            </label>
+
+                            <input
+                                id="whatsapp"
+                                placeholder="60123456789"
+                            >
+
+                        </div>
+
+
+                        <div class="field">
+
+                            <label>
+                                Status
+                            </label>
+
+                            <select id="status">
+
+                                <option value="TRUSTED">
+                                    TRUSTED
+                                </option>
+
+                                <option value="SUSPENDED">
+                                    SUSPENDED
+                                </option>
+
+                            </select>
+
+                        </div>
+
+
+                        <div class="field">
+
+                            <label>
+                                Verification
+                            </label>
+
+                            <select id="verified">
+
+                                <option value="true">
+                                    VERIFIED
+                                </option>
+
+                                <option value="false">
+                                    UNVERIFIED
+                                </option>
+
+                            </select>
+
+                        </div>
+
+
+                        <div class="field full">
+
+                            <label>
+                                Description
+                            </label>
+
+                            <textarea
+                                id="description"
+                                placeholder="Member description..."
+                            ></textarea>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="form-actions">
+
+                        <button
+                            type="submit"
+                            class="primary"
+                            id="saveMemberBtn"
+                        >
+                            ADD MEMBER
+                        </button>
+
+                        <button
+                            type="button"
+                            class="secondary"
+                            onclick="resetMemberForm()"
+                        >
+                            CLEAR
+                        </button>
+
+                    </div>
+
+                </form>
+
+            </div>
+
+        </div>
+
+
+        <!-- ADMINS -->
+
+        <div
+            class="panel"
+            id="admins"
+        >
+
+            <div class="card">
+
+                <h2>Admins</h2>
+
+                <p class="card-desc">
+                    Manage authorized MTLS administrators.
+                </p>
+
+                <div class="form-grid">
+
+                    <div class="field">
+
+                        <label>
+                            Admin Email
+                        </label>
+
+                        <input
+                            id="newAdminEmail"
+                            type="email"
+                            placeholder="admin@example.com"
+                        >
+
+                    </div>
+
+                    <div class="field">
+
+                        <label>
+                            Admin Role
+                        </label>
+
+                        <select id="newAdminRole">
+
+                            <option value="ADMIN">
+                                ADMIN
+                            </option>
+
+                            <option value="OWNER">
+                                OWNER
+                            </option>
+
+                        </select>
+
+                    </div>
+
+                </div>
+
+                <div class="form-actions">
+
+                    <button
+                        class="primary"
+                        onclick="addAdmin()"
+                    >
+                        ADD ADMIN
+                    </button>
+
+                </div>
+
+            </div>
+
+
+            <div class="card">
+
+                <div class="table-wrap">
+
+                    <table>
+
+                        <thead>
+
+                            <tr>
+                                <th>Email</th>
+                                <th>Role</th>
+                                <th>Added</th>
+                                <th>Action</th>
+                            </tr>
+
+                        </thead>
+
+                        <tbody id="adminsTable">
+
+                            <tr>
+                                <td colspan="4">
+                                    Loading...
+                                </td>
+                            </tr>
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- REVIEWS -->
+
+        <div
+            class="panel"
+            id="reviews"
+        >
+
+            <div class="card">
+
+                <h2>Reviews</h2>
+
+                <p class="card-desc">
+                    Moderate member reviews.
+                </p>
+
+                <div class="table-wrap">
+
+                    <table>
+
+                        <thead>
+
+                            <tr>
+                                <th>Reviewer</th>
+                                <th>Rating</th>
+                                <th>Review</th>
+                                <th>Status</th>
+                                <th>Action</th>
+                            </tr>
+
+                        </thead>
+
+                        <tbody id="reviewsTable">
+
+                            <tr>
+                                <td colspan="5">
+                                    Loading...
+                                </td>
+                            </tr>
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- AUDIT LOGS -->
+
+        <div
+            class="panel"
+            id="logs"
+        >
+
+            <div class="card">
+
+                <h2>Audit Logs</h2>
+
+                <p class="card-desc">
+                    Every important admin action is recorded here.
+                </p>
+
+                <div id="logsList">
+
+                    Loading...
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </main>
+
+</section>
+
+
+<div
+    class="toast"
+    id="toast"
+></div>
+
+
+<script>
+
+/* =========================================================
+   SUPABASE CONFIG
+   ========================================================= */
+
+const SUPABASE_URL =
+    "YOUR_SUPABASE_URL";
+
+const SUPABASE_ANON_KEY =
+    "YOUR_SUPABASE_ANON_KEY";
+
+const supabaseClient =
+    supabase.createClient(
+        SUPABASE_URL,
+        SUPABASE_ANON_KEY
+    );
+
+
+/* =========================================================
+   HELPERS
+   ========================================================= */
+
+function toast(message){
+
+    const el =
+        document.getElementById("toast");
+
+    el.textContent = message;
+
+    el.style.display = "block";
+
+    setTimeout(() => {
+
+        el.style.display = "none";
+
+    },3000);
+
+}
+
+
+function escapeHTML(value){
+
+    return String(value ?? "")
+        .replaceAll("&","&amp;")
+        .replaceAll("<","&lt;")
+        .replaceAll(">","&gt;")
+        .replaceAll('"',"&quot;")
+        .replaceAll("'","&#039;");
+
+}
+
+
+/* =========================================================
+   LOGIN
+   ========================================================= */
+
+document
+    .getElementById("loginForm")
+    .addEventListener("submit", async function(e){
+
+        e.preventDefault();
+
+        const email =
+            document.getElementById("email").value.trim();
+
+        const password =
+            document.getElementById("password").value;
+
+        const error =
+            document.getElementById("loginError");
+
+        const btn =
+            document.getElementById("loginBtn");
+
+        error.textContent = "";
+
+        btn.disabled = true;
+
+        btn.textContent = "SIGNING IN...";
+
+        const { error:loginError } =
+            await supabaseClient.auth.signInWithPassword({
+                email,
+                password
+            });
+
+        if(loginError){
+
+            error.textContent =
+                loginError.message;
+
+            btn.disabled = false;
+            btn.textContent = "SIGN IN";
+
+            return;
+        }
+
+        await checkAdmin();
+
+        btn.disabled = false;
+        btn.textContent = "SIGN IN";
+
+    });
+
+
+/* =========================================================
+   CHECK SESSION / ADMIN
+   ========================================================= */
+
+async function checkAdmin(){
+
+    const {
+        data:{
+            user
+        }
+    } =
+        await supabaseClient.auth.getUser();
+
+
+    if(!user){
+
+        showLogin();
+
+        return;
+
+    }
+
+
+    const {
+        data:admin,
+        error
+    } =
+        await supabaseClient
+            .from("admins")
+            .select("id,email,role,active")
+            .eq("user_id",user.id)
+            .eq("active",true)
+            .maybeSingle();
+
+
+    if(error || !admin){
+
+        await supabaseClient.auth.signOut();
+
+        document.getElementById("loginError").textContent =
+            "This account is not authorized as an MTLS admin.";
+
+        showLogin();
+
+        return;
+
+    }
+
+
+    document.getElementById("adminRole").textContent =
+        admin.role;
+
+
+    showDashboard();
+
+    loadEverything();
+
+}
+
+
+function showLogin(){
+
+    document
+        .getElementById("loginScreen")
+        .style.display = "flex";
+
+    document
+        .getElementById("dashboard")
+        .style.display = "none";
+
+}
+
+
+function showDashboard(){
+
+    document
+        .getElementById("loginScreen")
+        .style.display = "none";
+
+    document
+        .getElementById("dashboard")
+        .style.display = "block";
+
+}
+
+
+async function logout(){
+
+    await supabaseClient.auth.signOut();
+
+    showLogin();
+
+}
+
+
+/* =========================================================
+   TABS
+   ========================================================= */
+
+function showTab(id,button){
+
+    document
+        .querySelectorAll(".panel")
+        .forEach(panel =>
+            panel.classList.remove("active")
+        );
+
+    document
+        .querySelectorAll(".tab")
+        .forEach(tab =>
+            tab.classList.remove("active")
+        );
+
+    document
+        .getElementById(id)
+        .classList.add("active");
+
+    button.classList.add("active");
+
+}
+
+
+/* =========================================================
+   LOAD EVERYTHING
+   ========================================================= */
+
+async function loadEverything(){
+
+    await Promise.all([
+        loadMembers(),
+        loadAdmins(),
+        loadReviews(),
+        loadLogs(),
+        loadStats()
+    ]);
+
+}
+
+
+/* =========================================================
+   STATS
+   ========================================================= */
+
+async function loadStats(){
+
+    const {
+        count:members
+    } =
+        await supabaseClient
+            .from("profiles")
+            .select("*",{count:"exact",head:true});
+
+
+    const {
+        count:verified
+    } =
+        await supabaseClient
+            .from("profiles")
+            .select("*",{count:"exact",head:true})
+            .eq("verified",true);
+
+
+    const {
+        count:trusted
+    } =
+        await supabaseClient
+            .from("profiles")
+            .select("*",{count:"exact",head:true})
+            .eq("status","TRUSTED");
+
+
+    const {
+        count:reviews
+    } =
+        await supabaseClient
+            .from("reviews")
+            .select("*",{count:"exact",head:true});
+
+
+    document.getElementById("totalMembers")
+        .textContent = members ?? 0;
+
+    document.getElementById("totalVerified")
+        .textContent = verified ?? 0;
+
+    document.getElementById("totalTrusted")
+        .textContent = trusted ?? 0;
+
+    document.getElementById("totalReviews")
+        .textContent = reviews ?? 0;
+
+}
+
+
+/* =========================================================
+   MEMBERS
+   ========================================================= */
+
+async function loadMembers(){
+
+    const tbody =
+        document.getElementById("membersTable");
+
+
+    const {
+        data,
+        error
+    } =
+        await supabaseClient
+            .from("profiles")
+            .select("*")
+            .order("created_at",{ascending:false});
+
+
+    if(error){
+
+        tbody.innerHTML =
+            `<tr><td colspan="5">
+                ${escapeHTML(error.message)}
+            </td></tr>`;
+
+        return;
+
+    }
+
+
+    if(!data || data.length === 0){
+
+        tbody.innerHTML =
+            `<tr><td colspan="5">
+                No members yet.
+            </td></tr>`;
+
+        return;
+
+    }
+
+
+    tbody.innerHTML =
+        data.map(member => `
+
+            <tr>
+
+                <td>
+                    <strong>
+                        ${escapeHTML(member.display_name || member.username)}
+                    </strong>
+                    <br>
+                    <small style="color:#657287">
+                        @${escapeHTML(member.username)}
+                    </small>
+                </td>
+
+                <td>
+                    ${escapeHTML(member.role)}
+                </td>
+
+                <td>
+
+                    <span class="badge ${
+                        member.status === "TRUSTED"
+                        ? "trusted"
+                        : "suspended"
+                    }">
+
+                        ${escapeHTML(member.status)}
+
+                    </span>
+
+                </td>
+
+                <td>
+
+                    <span class="badge ${
+                        member.verified
+                        ? "verified"
+                        : ""
+                    }">
+
+                        ${member.verified
+                            ? "VERIFIED"
+                            : "UNVERIFIED"}
+
+                    </span>
+
+                </td>
+
+                <td>
+
+                    <div class="actions">
+
+                        <button
+                            class="action"
+                            onclick="editMember('${member.id}')"
+                        >
+                            Edit
+                        </button>
+
+                        <button
+                            class="action"
+                            onclick="toggleVerify('${member.id}',${!member.verified})"
+                        >
+                            ${member.verified
+                                ? "Unverify"
+                                : "Verify"}
+                        </button>
+
+                        <button
+                            class="action"
+                            onclick="toggleStatus('${member.id}','${member.status}')"
+                        >
+                            ${
+                                member.status === "TRUSTED"
+                                ? "Suspend"
+                                : "Trust"
+                            }
+                        </button>
+
+                        <button
+                            class="action danger"
+                            onclick="deleteMember('${member.id}')"
+                        >
+                            Remove
+                        </button>
+
+                    </div>
+
+                </td>
+
+            </tr>
+
+        `).join("");
+
+}
+
+
+/* =========================================================
+   ADD / EDIT MEMBER
+   ========================================================= */
+
+document
+    .getElementById("memberForm")
+    .addEventListener("submit",async function(e){
+
+        e.preventDefault();
+
+
+        const editingId =
+            document.getElementById("editingId").value;
+
+
+        const member = {
+
+            username:
+                document.getElementById("username")
+                    .value.trim(),
+
+            display_name:
+                document.getElementById("displayName")
+                    .value.trim(),
+
+            role:
+                document.getElementById("role")
+                    .value,
+
+            whatsapp:
+                document.getElementById("whatsapp")
+                    .value.trim(),
+
+            status:
+                document.getElementById("status")
+                    .value,
+
+            verified:
+                document.getElementById("verified")
+                    .value === "true",
+
+            description:
+                document.getElementById("description")
+                    .value.trim()
+
+        };
+
+
+        let error;
+
+
+        if(editingId){
+
+            ({
+                error
+            } =
+                await supabaseClient
+                    .from("profiles")
+                    .update(member)
+                    .eq("id",editingId));
+
+        }else{
+
+            ({
+                error
+            } =
+                await supabaseClient
+                    .from("profiles")
+                    .insert(member));
+
+        }
+
+
+        if(error){
+
+            toast(error.message);
+
+            return;
+
+        }
+
+
+        toast(
+            editingId
+            ? "Member updated."
+            : "Member added."
+        );
+
+
+        await loadEverything();
+
+        resetMemberForm();
+
+        document
+            .querySelector(".tab")
+            .click();
+
+    });
+
+
+async function editMember(id){
+
+    const {
+        data,
+        error
+    } =
+        await supabaseClient
+            .from("profiles")
+            .select("*")
+            .eq("id",id)
+            .single();
+
+
+    if(error){
+
+        toast(error.message);
+
+        return;
+
+    }
+
+
+    document.getElementById("editingId")
+        .value = data.id;
+
+    document.getElementById("username")
+        .value = data.username || "";
+
+    document.getElementById("displayName")
+        .value = data.display_name || "";
+
+    document.getElementById("role")
+        .value = data.role || "MEMBER";
+
+    document.getElementById("whatsapp")
+        .value = data.whatsapp || "";
+
+    document.getElementById("status")
+        .value = data.status || "TRUSTED";
+
+    document.getElementById("verified")
+        .value = String(data.verified);
+
+    document.getElementById("description")
+        .value = data.description || "";
+
+    document.getElementById("saveMemberBtn")
+        .textContent = "SAVE CHANGES";
+
+
+    const tab =
+        [...document.querySelectorAll(".tab")]
+            .find(x => x.textContent.includes("Add Member"));
+
+    showTab("addMember",tab);
+
+}
+
+
+function resetMemberForm(){
+
+    document.getElementById("memberForm")
+        .reset();
+
+    document.getElementById("editingId")
+        .value = "";
+
+    document.getElementById("saveMemberBtn")
+        .textContent = "ADD MEMBER";
+
+}
+
+
+/* =========================================================
+   VERIFY
+   ========================================================= */
+
+async function toggleVerify(id,value){
+
+    const {
+        error
+    } =
+        await supabaseClient
+            .from("profiles")
+            .update({
+                verified:value
+            })
+            .eq("id",id);
+
+
+    if(error){
+
+        toast(error.message);
+
+        return;
+
+    }
+
+
+    await writeAudit(
+        "UPDATE_PROFILE",
+        id,
+        {
+            verified:value
+        }
+    );
+
+
+    toast(
+        value
+        ? "Member verified."
+        : "Member unverified."
+    );
+
+    await loadEverything();
+
+}
+
+
+/* =========================================================
+   STATUS
+   ========================================================= */
+
+async function toggleStatus(id,current){
+
+    const newStatus =
+        current === "TRUSTED"
+        ? "SUSPENDED"
+        : "TRUSTED";
+
+
+    const {
+        error
+    } =
+        await supabaseClient
+            .from("profiles")
+            .update({
+                status:newStatus
+            })
+            .eq("id",id);
+
+
+    if(error){
+
+        toast(error.message);
+
+        return;
+
+    }
+
+
+    await writeAudit(
+        "UPDATE_STATUS",
+        id,
+        {
+            status:newStatus
+        }
+    );
+
+
+    toast(
+        "Status changed to " + newStatus
+    );
+
+    await loadEverything();
+
+}
+
+
+/* =========================================================
+   DELETE MEMBER
+   ========================================================= */
+
+async function deleteMember(id){
+
+    if(!confirm(
+        "Remove this member from MTLS?"
+    )){
+        return;
+    }
+
+
+    const {
+        error
+    } =
+        await supabaseClient
+            .from("profiles")
+            .delete()
+            .eq("id",id);
+
+
+    if(error){
+
+        toast(error.message);
+
+        return;
+
+    }
+
+
+    await writeAudit(
+        "DELETE_PROFILE",
+        id,
+        {}
+    );
+
+
+    toast("Member removed.");
+
+    await loadEverything();
+
+}
+
+
+/* =========================================================
+   ADMINS
+   ========================================================= */
+
+async function loadAdmins(){
+
+    const tbody =
+        document.getElementById("adminsTable");
+
+
+    const {
+        data,
+        error
+    } =
+        await supabaseClient
+            .from("admins")
+            .select("*")
+            .order("created_at",{ascending:false});
+
+
+    if(error){
+
+        tbody.innerHTML =
+            `<tr><td colspan="4">
+                ${escapeHTML(error.message)}
+            </td></tr>`;
+
+        return;
+
+    }
+
+
+    if(!data?.length){
+
+        tbody.innerHTML =
+            `<tr><td colspan="4">
+                No admins found.
+            </td></tr>`;
+
+        return;
+
+    }
+
+
+    tbody.innerHTML =
+        data.map(admin => `
+
+            <tr>
+
+                <td>
+                    ${escapeHTML(admin.email)}
+                </td>
+
+                <td>
+                    ${escapeHTML(admin.role)}
+                </td>
+
+                <td>
+                    ${new Date(
+                        admin.created_at
+                    ).toLocaleString()}
+                </td>
+
+                <td>
+
+                    <button
+                        class="action danger"
+                        onclick="removeAdmin('${admin.id}')"
+                    >
+                        Disable
+                    </button>
+
+                </td>
+
+            </tr>
+
+        `).join("");
+
+}
+
+
+async function addAdmin(){
+
+    const email =
+        document.getElementById("newAdminEmail")
+            .value.trim();
+
+    const role =
+        document.getElementById("newAdminRole")
+            .value;
+
+
+    if(!email){
+
+        toast("Enter admin email.");
+
+        return;
+
+    }
+
+
+    /*
+       IMPORTANT:
+       Creating the Supabase Auth user should be done
+       through a secure server/Edge Function, NOT by
+       exposing a service-role key in this HTML.
+
+       This button therefore expects the email to belong
+       to an existing Supabase Auth user.
+    */
+
+
+    const {
+        data:userList,
+        error
+    } =
+        await supabaseClient
+            .rpc(
+                "find_user_id_by_email",
+                {
+                    lookup_email:email
+                }
+            );
+
+
+    if(error){
+
+        toast(
+            "Create the secure RPC first."
+        );
+
+        return;
+
+    }
+
+
+    if(!userList){
+
+        toast(
+            "No Supabase Auth user found."
+        );
+
+        return;
+
+    }
+
+
+    const {
+        error:insertError
+    } =
+        await supabaseClient
+            .from("admins")
+            .insert({
+                user_id:userList,
+                email,
+                role,
+                active:true
+            });
+
+
+    if(insertError){
+
+        toast(insertError.message);
+
+        return;
+
+    }
+
+
+    await writeAudit(
+        "ADD_ADMIN",
+        null,
+        {
+            email,
+            role
+        }
+    );
+
+
+    document.getElementById("newAdminEmail")
+        .value = "";
+
+    toast("Admin added.");
+
+    await loadAdmins();
+
+}
+
+
+async function removeAdmin(id){
+
+    if(!confirm(
+        "Disable this admin?"
+    )){
+        return;
+    }
+
+
+    const {
+        error
+    } =
+        await supabaseClient
+            .from("admins")
+            .update({
+                active:false
+            })
+            .eq("id",id);
+
+
+    if(error){
+
+        toast(error.message);
+
+        return;
+
+    }
+
+
+    await writeAudit(
+        "DISABLE_ADMIN",
+        id,
+        {}
+    );
+
+
+    toast("Admin disabled.");
+
+    await loadAdmins();
+
+}
+
+
+/* =========================================================
+   REVIEWS
+   ========================================================= */
+
+async function loadReviews(){
+
+    const tbody =
+        document.getElementById("reviewsTable");
+
+
+    const {
+        data,
+        error
+    } =
+        await supabaseClient
+            .from("reviews")
+            .select(`
+                id,
+                reviewer_name,
+                rating,
+                review,
+                status,
+                profiles (
+                    username
+                )
+            `)
+            .order("created_at",{ascending:false});
+
+
+    if(error){
+
+        tbody.innerHTML =
+            `<tr><td colspan="5">
+                ${escapeHTML(error.message)}
+            </td></tr>`;
+
+        return;
+
+    }
+
+
+    if(!data?.length){
+
+        tbody.innerHTML =
+            `<tr><td colspan="5">
+                No reviews yet.
+            </td></tr>`;
+
+        return;
+
+    }
+
+
+    tbody.innerHTML =
+        data.map(review => `
+
+            <tr>
+
+                <td>
+                    ${escapeHTML(review.reviewer_name)}
+                </td>
+
+                <td>
+                    ${"★".repeat(review.rating)}
+                </td>
+
+                <td>
+                    ${escapeHTML(review.review)}
+                </td>
+
+                <td>
+                    ${escapeHTML(review.status)}
+                </td>
+
+                <td>
+
+                    ${
+                        review.status === "APPROVED"
+
+                        ? `
+                            <button
+                                class="action danger"
+                                onclick="moderateReview('${review.id}','REJECTED')"
+                            >
+                                Reject
+                            </button>
+                          `
+
+                        : `
+                            <button
+                                class="action"
+                                onclick="moderateReview('${review.id}','APPROVED')"
+                            >
+                                Approve
+                            </button>
+                          `
+                    }
+
+                </td>
+
+            </tr>
+
+        `).join("");
+
+}
+
+
+async function moderateReview(id,status){
+
+    const {
+        error
+    } =
+        await supabaseClient
+            .from("reviews")
+            .update({
+                status
+            })
+            .eq("id",id);
+
+
+    if(error){
+
+        toast(error.message);
+
+        return;
+
+    }
+
+
+    await writeAudit(
+        "MODERATE_REVIEW",
+        id,
+        {
+            status
+        }
+    );
+
+
+    toast("Review updated.");
+
+    await loadReviews();
+
+    await loadStats();
+
+}
+
+
+/* =========================================================
+   AUDIT LOGS
+   ========================================================= */
+
+async function writeAudit(
+    action,
+    targetId,
+    metadata
+){
+
+    await supabaseClient
+        .from("audit_logs")
+        .insert({
+
+            action,
+            target_id:targetId,
+            metadata
+
+        });
+
+}
+
+
+async function loadLogs(){
+
+    const container =
+        document.getElementById("logsList");
+
+
+    const {
+        data,
+        error
+    } =
+        await supabaseClient
+            .from("audit_logs")
+            .select("*")
+            .order("created_at",{ascending:false})
+            .limit(50);
+
+
+    if(error){
+
+        container.textContent =
+            error.message;
+
+        return;
+
+    }
+
+
+    if(!data?.length){
+
+        container.textContent =
+            "No audit logs yet.";
+
+        return;
+
+    }
+
+
+    container.innerHTML =
+        data.map(log => `
+
+            <div class="log">
+
+                <strong>
+                    ${escapeHTML(log.action)}
+                </strong>
+
+                <span>
+                    ${new Date(
+                        log.created_at
+                    ).toLocaleString()}
+                    ${
+                        log.target_id
+                        ? " • " + log.target_id
+                        : ""
+                    }
+                </span>
+
+            </div>
+
+        `).join("");
+
+}
+
+
+/* =========================================================
+   AUTH STATE
+   ========================================================= */
+
+supabaseClient
+    .auth
+    .onAuthStateChange(
+        async (event,session) => {
+
+            if(session){
+
+                await checkAdmin();
+
+            }else{
+
+                showLogin();
+
+            }
+
+        }
+    );
+
+
+/* INITIAL */
+
+checkAdmin();
+
+</script>
+
+</body>
+</html>
