@@ -1,0 +1,1157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>MTLS — Member Profile</title>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:Arial,Helvetica,sans-serif;
+}
+
+:root{
+    --bg:#030712;
+    --blue:#1683ff;
+    --text:#f5f7fb;
+    --muted:#8d9bb0;
+    --border:rgba(255,255,255,.08);
+    --green:#21d98b;
+    --red:#ff5364;
+}
+
+body{
+    min-height:100vh;
+    color:var(--text);
+    background:
+        radial-gradient(circle at 20% 0%,rgba(0,102,255,.16),transparent 30%),
+        radial-gradient(circle at 90% 20%,rgba(0,153,255,.10),transparent 25%),
+        var(--bg);
+}
+
+/* NAVBAR */
+
+.navbar{
+    position:sticky;
+    top:0;
+    z-index:1000;
+    height:76px;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    padding:0 6%;
+    background:rgba(3,7,18,.78);
+    backdrop-filter:blur(18px);
+    border-bottom:1px solid var(--border);
+}
+
+.brand{
+    display:flex;
+    align-items:center;
+    gap:12px;
+    color:white;
+    text-decoration:none;
+}
+
+.brand img{
+    width:44px;
+    height:44px;
+    object-fit:contain;
+    border-radius:12px;
+    padding:3px;
+    background:#07101f;
+    border:1px solid rgba(22,131,255,.35);
+}
+
+.brand-text{
+    display:flex;
+    flex-direction:column;
+}
+
+.brand-name{
+    font-size:19px;
+    font-weight:800;
+}
+
+.brand-sub{
+    color:var(--muted);
+    font-size:10px;
+    margin-top:2px;
+}
+
+.back{
+    color:#8fa0b8;
+    text-decoration:none;
+    font-size:13px;
+    font-weight:700;
+}
+
+.back:hover{
+    color:white;
+}
+
+/* MAIN */
+
+.container{
+    max-width:900px;
+    margin:auto;
+    padding:70px 6% 100px;
+}
+
+/* PROFILE CARD */
+
+.profile-card{
+    padding:35px;
+    border:1px solid var(--border);
+    border-radius:24px;
+    background:
+        radial-gradient(
+            circle at top right,
+            rgba(22,131,255,.10),
+            transparent 40%
+        ),
+        rgba(255,255,255,.025);
+    box-shadow:0 25px 70px rgba(0,0,0,.25);
+}
+
+.profile-header{
+    display:flex;
+    justify-content:space-between;
+    align-items:flex-start;
+    gap:20px;
+}
+
+.profile-name{
+    font-size:clamp(30px,5vw,46px);
+    font-weight:900;
+    letter-spacing:-1.5px;
+}
+
+.username{
+    margin-top:8px;
+    color:#687991;
+    font-size:13px;
+}
+
+.verified{
+    display:inline-flex;
+    align-items:center;
+    gap:6px;
+    margin-top:15px;
+    padding:7px 11px;
+    border-radius:8px;
+    color:#62b0ff;
+    background:rgba(22,131,255,.09);
+    border:1px solid rgba(22,131,255,.22);
+    font-size:10px;
+    font-weight:900;
+}
+
+.role{
+    padding:8px 12px;
+    border-radius:9px;
+    color:#aebbd0;
+    background:rgba(255,255,255,.05);
+    border:1px solid var(--border);
+    font-size:10px;
+    font-weight:900;
+    white-space:nowrap;
+}
+
+/* STATUS */
+
+.status{
+    display:flex;
+    align-items:center;
+    gap:8px;
+    margin-top:28px;
+    font-size:12px;
+    font-weight:900;
+}
+
+.status-dot{
+    width:8px;
+    height:8px;
+    border-radius:50%;
+}
+
+.trusted{
+    color:var(--green);
+}
+
+.trusted .status-dot{
+    background:var(--green);
+    box-shadow:0 0 12px rgba(33,217,139,.55);
+}
+
+.suspended{
+    color:var(--red);
+}
+
+.suspended .status-dot{
+    background:var(--red);
+}
+
+/* DESCRIPTION */
+
+.description{
+    margin-top:25px;
+    padding:20px;
+    border:1px solid var(--border);
+    border-radius:15px;
+    background:rgba(255,255,255,.018);
+}
+
+.description-title{
+    color:#718198;
+    font-size:10px;
+    font-weight:900;
+    text-transform:uppercase;
+    letter-spacing:1px;
+    margin-bottom:9px;
+}
+
+.description-text{
+    color:#c5cfdd;
+    font-size:13px;
+    line-height:1.7;
+}
+
+/* ACTION */
+
+.actions{
+    display:flex;
+    gap:10px;
+    margin-top:25px;
+}
+
+.btn{
+    flex:1;
+    padding:14px;
+    border-radius:11px;
+    text-align:center;
+    text-decoration:none;
+    font-size:12px;
+    font-weight:900;
+}
+
+.whatsapp{
+    color:#65e3ad;
+    background:rgba(33,217,139,.07);
+    border:1px solid rgba(33,217,139,.18);
+}
+
+.home{
+    color:#70b5ff;
+    background:rgba(22,131,255,.07);
+    border:1px solid rgba(22,131,255,.18);
+}
+
+/* REVIEWS */
+
+.reviews{
+    margin-top:22px;
+}
+
+.reviews-header{
+    display:flex;
+    justify-content:space-between;
+    align-items:end;
+    margin-bottom:15px;
+}
+
+.reviews-title{
+    font-size:22px;
+    font-weight:900;
+}
+
+.rating{
+    text-align:right;
+}
+
+.rating-number{
+    color:#ffd45c;
+    font-size:25px;
+    font-weight:900;
+}
+
+.rating-stars{
+    color:#ffd45c;
+    letter-spacing:2px;
+    font-size:13px;
+}
+
+.rating-count{
+    color:#697990;
+    font-size:10px;
+    margin-top:3px;
+}
+
+.review-list{
+    display:grid;
+    gap:12px;
+}
+
+.review{
+    padding:20px;
+    border:1px solid var(--border);
+    border-radius:15px;
+    background:rgba(255,255,255,.02);
+}
+
+.review-top{
+    display:flex;
+    justify-content:space-between;
+    gap:10px;
+}
+
+.reviewer{
+    font-size:13px;
+    font-weight:900;
+}
+
+.review-date{
+    color:#68778d;
+    font-size:10px;
+}
+
+.review-stars{
+    margin-top:7px;
+    color:#ffd45c;
+    font-size:12px;
+    letter-spacing:1px;
+}
+
+.review-text{
+    margin-top:10px;
+    color:#9aa8ba;
+    font-size:12px;
+    line-height:1.65;
+}
+
+.no-reviews{
+    padding:35px;
+    text-align:center;
+    border:1px dashed rgba(255,255,255,.10);
+    border-radius:15px;
+    color:#718198;
+    font-size:12px;
+}
+
+/* LOADING */
+
+.loading{
+    text-align:center;
+    padding:100px 20px;
+    color:var(--muted);
+    font-size:13px;
+}
+
+.loader{
+    width:30px;
+    height:30px;
+    margin:0 auto 15px;
+    border:3px solid rgba(255,255,255,.08);
+    border-top-color:var(--blue);
+    border-radius:50%;
+    animation:spin .8s linear infinite;
+}
+
+@keyframes spin{
+    to{
+        transform:rotate(360deg);
+    }
+}
+
+/* ERROR */
+
+.error{
+    text-align:center;
+    padding:100px 20px;
+}
+
+.error h2{
+    font-size:28px;
+    margin-bottom:10px;
+}
+
+.error p{
+    color:var(--muted);
+    font-size:13px;
+    margin-bottom:25px;
+}
+
+.error a{
+    display:inline-block;
+    padding:13px 20px;
+    border-radius:10px;
+    color:white;
+    background:#1683ff;
+    text-decoration:none;
+    font-size:12px;
+    font-weight:900;
+}
+
+/* MOBILE */
+
+@media(max-width:600px){
+
+    .navbar{
+        padding:0 5%;
+    }
+
+    .brand img{
+        width:40px;
+        height:40px;
+    }
+
+    .brand-name{
+        font-size:17px;
+    }
+
+    .brand-sub{
+        font-size:9px;
+    }
+
+    .container{
+        padding:45px 5% 70px;
+    }
+
+    .profile-card{
+        padding:24px;
+    }
+
+    .profile-header{
+        flex-direction:column;
+    }
+
+    .role{
+        align-self:flex-start;
+    }
+
+    .actions{
+        flex-direction:column;
+    }
+
+    .reviews-header{
+        align-items:flex-start;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<!-- NAVBAR -->
+
+<nav class="navbar">
+
+    <a href="index.html" class="brand">
+
+        <img
+            src="https://i.ibb.co/qMHWZRf3/photo-6113671142116627052-y.jpg"
+            alt="MTLS Logo"
+        >
+
+        <div class="brand-text">
+
+            <div class="brand-name">
+                MTLS
+            </div>
+
+            <div class="brand-sub">
+                Malaysia Trusted List Seller
+            </div>
+
+        </div>
+
+    </a>
+
+    <a
+        href="index.html#trusted"
+        class="back"
+    >
+        ← Back to List
+    </a>
+
+</nav>
+
+
+<!-- MAIN -->
+
+<main class="container">
+
+    <!-- LOADING -->
+
+    <div
+        class="loading"
+        id="loading"
+    >
+
+        <div class="loader"></div>
+
+        Loading profile...
+
+    </div>
+
+
+    <!-- ERROR -->
+
+    <div
+        class="error"
+        id="error"
+        style="display:none;"
+    >
+
+        <h2>
+            Profile Not Found
+        </h2>
+
+        <p>
+            This member profile does not exist or is no longer available.
+        </p>
+
+        <a href="index.html#trusted">
+            Back to Trusted List
+        </a>
+
+    </div>
+
+
+    <!-- PROFILE -->
+
+    <div
+        id="profileContent"
+        style="display:none;"
+    >
+
+        <div class="profile-card">
+
+            <div class="profile-header">
+
+                <div>
+
+                    <div
+                        class="profile-name"
+                        id="profileName"
+                    >
+                        —
+                    </div>
+
+                    <div
+                        class="username"
+                        id="username"
+                    >
+                        @—
+                    </div>
+
+                    <div
+                        class="verified"
+                        id="verified"
+                        style="display:none;"
+                    >
+                        ✓ VERIFIED BY MTLS
+                    </div>
+
+                </div>
+
+                <div
+                    class="role"
+                    id="role"
+                >
+                    MEMBER
+                </div>
+
+            </div>
+
+
+            <div
+                class="status trusted"
+                id="status"
+            >
+
+                <span class="status-dot"></span>
+
+                <span id="statusText">
+                    TRUSTED
+                </span>
+
+            </div>
+
+
+            <div class="description">
+
+                <div class="description-title">
+                    About Member
+                </div>
+
+                <div
+                    class="description-text"
+                    id="description"
+                >
+                    —
+                </div>
+
+            </div>
+
+
+            <div class="actions">
+
+                <a
+                    href="#"
+                    class="btn whatsapp"
+                    id="whatsapp"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                >
+                    WhatsApp
+                </a>
+
+                <a
+                    href="index.html#trusted"
+                    class="btn home"
+                >
+                    Back to Trusted List
+                </a>
+
+            </div>
+
+        </div>
+
+
+        <!-- REVIEWS -->
+
+        <section class="reviews">
+
+            <div class="reviews-header">
+
+                <div class="reviews-title">
+                    Reviews
+                </div>
+
+                <div class="rating">
+
+                    <div
+                        class="rating-number"
+                        id="ratingNumber"
+                    >
+                        0.0
+                    </div>
+
+                    <div
+                        class="rating-stars"
+                        id="ratingStars"
+                    >
+                        ☆☆☆☆☆
+                    </div>
+
+                    <div
+                        class="rating-count"
+                        id="ratingCount"
+                    >
+                        0 reviews
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <div
+                class="review-list"
+                id="reviewList"
+            ></div>
+
+        </section>
+
+    </div>
+
+</main>
+
+
+<script>
+
+/* ================= SUPABASE ================= */
+
+const SUPABASE_URL =
+    "https://tmvqcmiyjknefaafitav.supabase.co";
+
+const SUPABASE_ANON_KEY =
+    "sb_publishable_bUrV_nUC6hioAg8RW6XbEA_U436y-0S";
+
+const supabaseClient =
+    window.supabase.createClient(
+        SUPABASE_URL,
+        SUPABASE_ANON_KEY
+    );
+
+
+/* ================= ELEMENTS ================= */
+
+const loading =
+    document.getElementById("loading");
+
+const errorBox =
+    document.getElementById("error");
+
+const profileContent =
+    document.getElementById("profileContent");
+
+const profileName =
+    document.getElementById("profileName");
+
+const username =
+    document.getElementById("username");
+
+const role =
+    document.getElementById("role");
+
+const verified =
+    document.getElementById("verified");
+
+const status =
+    document.getElementById("status");
+
+const statusText =
+    document.getElementById("statusText");
+
+const description =
+    document.getElementById("description");
+
+const whatsapp =
+    document.getElementById("whatsapp");
+
+const ratingNumber =
+    document.getElementById("ratingNumber");
+
+const ratingStars =
+    document.getElementById("ratingStars");
+
+const ratingCount =
+    document.getElementById("ratingCount");
+
+const reviewList =
+    document.getElementById("reviewList");
+
+
+/* ================= GET PROFILE ID ================= */
+
+const params =
+    new URLSearchParams(
+        window.location.search
+    );
+
+const profileId =
+    params.get("id");
+
+
+/* ================= LOAD PROFILE ================= */
+
+async function loadProfile(){
+
+    if(!profileId){
+
+        showError();
+
+        return;
+
+    }
+
+
+    const {
+        data: profile,
+        error: profileError
+    } =
+        await supabaseClient
+            .from("profiles")
+            .select(`
+                id,
+                username,
+                display_name,
+                role,
+                whatsapp,
+                description,
+                verified,
+                status,
+                created_at
+            `)
+            .eq("id", profileId)
+            .single();
+
+
+    if(profileError || !profile){
+
+        console.error(
+            "Profile error:",
+            profileError
+        );
+
+        showError();
+
+        return;
+
+    }
+
+
+    renderProfile(profile);
+
+    await loadReviews(profile.id);
+
+}
+
+
+/* ================= RENDER PROFILE ================= */
+
+function renderProfile(profile){
+
+    profileName.textContent =
+        profile.display_name ||
+        profile.username ||
+        "Unnamed Member";
+
+
+    username.textContent =
+        "@" +
+        (
+            profile.username ||
+            "-"
+        );
+
+
+    role.textContent =
+        profile.role ||
+        "MEMBER";
+
+
+    description.textContent =
+        profile.description ||
+        "No description provided.";
+
+
+    /* VERIFIED */
+
+    if(profile.verified){
+
+        verified.style.display =
+            "inline-flex";
+
+    }else{
+
+        verified.style.display =
+            "none";
+
+    }
+
+
+    /* STATUS */
+
+    status.className =
+        "status " +
+        (
+            profile.status === "SUSPENDED"
+                ? "suspended"
+                : "trusted"
+        );
+
+
+    statusText.textContent =
+        profile.status ||
+        "TRUSTED";
+
+
+    /* WHATSAPP */
+
+    const phone =
+        cleanWhatsApp(
+            profile.whatsapp
+        );
+
+
+    if(phone){
+
+        whatsapp.href =
+            "https://wa.me/" + phone;
+
+        whatsapp.style.display =
+            "block";
+
+    }else{
+
+        whatsapp.style.display =
+            "none";
+
+    }
+
+
+    loading.style.display =
+        "none";
+
+    profileContent.style.display =
+        "block";
+
+}
+
+
+/* ================= LOAD REVIEWS ================= */
+
+async function loadReviews(profileId){
+
+    const {
+        data: reviews,
+        error
+    } =
+        await supabaseClient
+            .from("reviews")
+            .select(`
+                id,
+                reviewer_name,
+                rating,
+                review,
+                created_at
+            `)
+            .eq("profile_id", profileId)
+            .eq("status", "APPROVED")
+            .order("created_at", {
+                ascending:false
+            });
+
+
+    if(error){
+
+        console.error(
+            "Reviews error:",
+            error
+        );
+
+        renderReviews([]);
+
+        return;
+
+    }
+
+
+    renderReviews(
+        reviews || []
+    );
+
+}
+
+
+/* ================= RENDER REVIEWS ================= */
+
+function renderReviews(reviews){
+
+    if(!reviews.length){
+
+        ratingNumber.textContent =
+            "0.0";
+
+        ratingStars.textContent =
+            "☆☆☆☆☆";
+
+        ratingCount.textContent =
+            "0 reviews";
+
+        reviewList.innerHTML = `
+            <div class="no-reviews">
+                No approved reviews yet.
+            </div>
+        `;
+
+        return;
+
+    }
+
+
+    const total =
+        reviews.reduce(
+            (sum, review) =>
+                sum +
+                Number(review.rating || 0),
+            0
+        );
+
+
+    const average =
+        total / reviews.length;
+
+
+    ratingNumber.textContent =
+        average.toFixed(1);
+
+
+    ratingStars.textContent =
+        makeStars(average);
+
+
+    ratingCount.textContent =
+        reviews.length +
+        (
+            reviews.length === 1
+                ? " review"
+                : " reviews"
+        );
+
+
+    reviewList.innerHTML = "";
+
+
+    reviews.forEach(review => {
+
+        const item =
+            document.createElement("div");
+
+        item.className =
+            "review";
+
+
+        const date =
+            review.created_at
+                ? new Date(
+                    review.created_at
+                  ).toLocaleDateString(
+                    "en-MY",
+                    {
+                        day:"2-digit",
+                        month:"short",
+                        year:"numeric"
+                    }
+                  )
+                : "";
+
+
+        item.innerHTML = `
+
+            <div class="review-top">
+
+                <div class="reviewer">
+                    ${escapeHTML(
+                        review.reviewer_name ||
+                        "Anonymous"
+                    )}
+                </div>
+
+                <div class="review-date">
+                    ${date}
+                </div>
+
+            </div>
+
+            <div class="review-stars">
+                ${makeStars(
+                    Number(review.rating || 0)
+                )}
+            </div>
+
+            <div class="review-text">
+                ${escapeHTML(
+                    review.review ||
+                    ""
+                )}
+            </div>
+
+        `;
+
+
+        reviewList.appendChild(item);
+
+    });
+
+}
+
+
+/* ================= STARS ================= */
+
+function makeStars(rating){
+
+    const rounded =
+        Math.round(
+            Number(rating)
+        );
+
+    let stars = "";
+
+    for(let i = 1; i <= 5; i++){
+
+        stars +=
+            i <= rounded
+                ? "★"
+                : "☆";
+
+    }
+
+    return stars;
+
+}
+
+
+/* ================= WHATSAPP ================= */
+
+function cleanWhatsApp(number){
+
+    if(!number){
+        return "";
+    }
+
+    let value =
+        String(number)
+            .replace(/\D/g,"");
+
+
+    if(value.startsWith("0")){
+
+        value =
+            "60" +
+            value.substring(1);
+
+    }
+
+    return value;
+
+}
+
+
+/* ================= SECURITY ================= */
+
+function escapeHTML(value){
+
+    return String(value)
+        .replace(/&/g,"&amp;")
+        .replace(/</g,"&lt;")
+        .replace(/>/g,"&gt;")
+        .replace(/"/g,"&quot;")
+        .replace(/'/g,"&#039;");
+
+}
+
+
+/* ================= ERROR ================= */
+
+function showError(){
+
+    loading.style.display =
+        "none";
+
+    profileContent.style.display =
+        "none";
+
+    errorBox.style.display =
+        "block";
+
+}
+
+
+/* ================= START ================= */
+
+loadProfile();
+
+</script>
+
+</body>
+</html>
