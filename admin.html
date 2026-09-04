@@ -305,6 +305,31 @@ body{
     grid-column:1/-1;
 }
 
+.checkbox-field{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    min-height:44px;
+}
+
+.checkbox-field input{
+    width:17px;
+    height:17px;
+    accent-color:var(--blue);
+    cursor:pointer;
+}
+
+.checkbox-field label{
+    margin:0;
+    cursor:pointer;
+}
+
+.feature-note{
+    color:#718198;
+    font-size:10px;
+    margin-top:5px;
+}
+
 .form-actions{
     display:flex;
     gap:10px;
@@ -339,7 +364,7 @@ body{
 table{
     width:100%;
     border-collapse:collapse;
-    min-width:700px;
+    min-width:850px;
 }
 
 th{
@@ -380,6 +405,16 @@ td{
     color:var(--red);
 }
 
+.featured{
+    background:rgba(255,200,87,.10);
+    color:var(--yellow);
+}
+
+.not-featured{
+    background:rgba(255,255,255,.04);
+    color:#68768a;
+}
+
 .actions{
     display:flex;
     gap:6px;
@@ -399,6 +434,12 @@ td{
 .action:hover{
     color:white;
     border-color:rgba(22,131,255,.3);
+}
+
+.action.feature-action{
+    color:#ffc857;
+    border-color:rgba(255,200,87,.18);
+    background:rgba(255,200,87,.05);
 }
 
 .action.danger{
@@ -535,568 +576,504 @@ td{
 
 <section class="dashboard" id="dashboard">
 
-    <nav class="navbar">
+<nav class="navbar">
 
-        <div class="brand">
+    <div class="brand">
 
-            <img
-                src="https://i.ibb.co/qMHWZRf3/photo-6113671142116627052-y.jpg"
-                alt="MTLS"
-            >
-
-            <div>
-                <strong>MTLS Admin</strong>
-                <small id="adminRole">ADMIN</small>
-            </div>
-
-        </div>
-
-        <button
-            class="logout"
-            onclick="logout()"
-        >
-            Logout
-        </button>
-
-    </nav>
-
-
-    <main class="container">
-
-        <div class="heading">
-
-            <h1>Dashboard</h1>
-
-            <p>
-                Manage MTLS members, admins, reviews and audit logs.
-            </p>
-
-        </div>
-
-
-        <!-- STATS -->
-
-        <div class="stats">
-
-            <div class="stat">
-
-                <div class="stat-label">
-                    TOTAL MEMBERS
-                </div>
-
-                <div
-                    class="stat-number"
-                    id="totalMembers"
-                >
-                    0
-                </div>
-
-            </div>
-
-
-            <div class="stat">
-
-                <div class="stat-label">
-                    VERIFIED
-                </div>
-
-                <div
-                    class="stat-number"
-                    id="totalVerified"
-                >
-                    0
-                </div>
-
-            </div>
-
-
-            <div class="stat">
-
-                <div class="stat-label">
-                    TRUSTED
-                </div>
-
-                <div
-                    class="stat-number"
-                    id="totalTrusted"
-                >
-                    0
-                </div>
-
-            </div>
-
-
-            <div class="stat">
-
-                <div class="stat-label">
-                    REVIEWS
-                </div>
-
-                <div
-                    class="stat-number"
-                    id="totalReviews"
-                >
-                    0
-                </div>
-
-            </div>
-
-        </div>
-
-
-        <!-- TABS -->
-
-        <div class="tabs">
-
-            <button
-                class="tab active"
-                onclick="showTab('members',this)"
-            >
-                Members
-            </button>
-
-            <button
-                class="tab"
-                onclick="showTab('addMember',this)"
-            >
-                Add Member
-            </button>
-
-            <button
-                class="tab"
-                onclick="showTab('admins',this)"
-            >
-                Admins
-            </button>
-
-            <button
-                class="tab"
-                onclick="showTab('reviews',this)"
-            >
-                Reviews
-            </button>
-
-            <button
-                class="tab"
-                onclick="showTab('logs',this)"
-            >
-                Audit Logs
-            </button>
-
-        </div>
-
-
-        <!-- MEMBERS -->
-
-        <div
-            class="panel active"
-            id="members"
+        <img
+            src="https://i.ibb.co/qMHWZRf3/photo-6113671142116627052-y.jpg"
+            alt="MTLS"
         >
 
-            <div class="card">
-
-                <h2>Members</h2>
-
-                <p class="card-desc">
-                    Manage trusted list members.
-                </p>
-
-                <div class="table-wrap">
-
-                    <table>
-
-                        <thead>
-
-                            <tr>
-                                <th>Username</th>
-                                <th>Role</th>
-                                <th>Status</th>
-                                <th>Verified</th>
-                                <th>Actions</th>
-                            </tr>
-
-                        </thead>
-
-                        <tbody id="membersTable">
-
-                            <tr>
-                                <td colspan="5">
-                                    Loading...
-                                </td>
-                            </tr>
-
-                        </tbody>
-
-                    </table>
-
-                </div>
-
-            </div>
-
+        <div>
+            <strong>MTLS Admin</strong>
+            <small id="adminRole">ADMIN</small>
         </div>
 
+    </div>
 
-        <!-- ADD MEMBER -->
+    <button
+        class="logout"
+        onclick="logout()"
+    >
+        Logout
+    </button>
 
-        <div
-            class="panel"
-            id="addMember"
-        >
+</nav>
 
-            <div class="card">
 
-                <h2>Add Member</h2>
+<main class="container">
 
-                <p class="card-desc">
-                    Create a new MTLS trusted list profile.
-                </p>
+<div class="heading">
 
-                <form id="memberForm">
+    <h1>Dashboard</h1>
 
-                    <input
-                        type="hidden"
-                        id="editingId"
-                    >
+    <p>
+        Manage MTLS members, admins, reviews and audit logs.
+    </p>
 
-                    <div class="form-grid">
+</div>
 
-                        <div class="field">
 
-                            <label>
-                                Username
-                            </label>
+<!-- STATS -->
 
-                            <input
-                                id="username"
-                                required
-                                placeholder="Example: luffy"
-                            >
+<div class="stats">
 
-                        </div>
+    <div class="stat">
+        <div class="stat-label">TOTAL MEMBERS</div>
+        <div class="stat-number" id="totalMembers">0</div>
+    </div>
 
+    <div class="stat">
+        <div class="stat-label">VERIFIED</div>
+        <div class="stat-number" id="totalVerified">0</div>
+    </div>
 
-                        <div class="field">
+    <div class="stat">
+        <div class="stat-label">TRUSTED</div>
+        <div class="stat-number" id="totalTrusted">0</div>
+    </div>
 
-                            <label>
-                                Display Name
-                            </label>
+    <div class="stat">
+        <div class="stat-label">REVIEWS</div>
+        <div class="stat-number" id="totalReviews">0</div>
+    </div>
 
-                            <input
-                                id="displayName"
-                                required
-                                placeholder="Example: Luffy Store"
-                            >
+</div>
 
-                        </div>
 
+<!-- TABS -->
 
-                        <div class="field">
+<div class="tabs">
 
-                            <label>
-                                Role
-                            </label>
+    <button
+        class="tab active"
+        onclick="showTab('members',this)"
+    >
+        Members
+    </button>
 
-                            <select id="role">
+    <button
+        class="tab"
+        onclick="showTab('addMember',this)"
+    >
+        Add Member
+    </button>
 
-                                <option value="MEMBER">
-                                    MEMBER
-                                </option>
+    <button
+        class="tab"
+        onclick="showTab('admins',this)"
+    >
+        Admins
+    </button>
 
-                                <option value="ADMIN">
-                                    ADMIN
-                                </option>
+    <button
+        class="tab"
+        onclick="showTab('reviews',this)"
+    >
+        Reviews
+    </button>
 
-                                <option value="OWNER">
-                                    OWNER
-                                </option>
+    <button
+        class="tab"
+        onclick="showTab('logs',this)"
+    >
+        Audit Logs
+    </button>
 
-                                <option value="PARTNER">
-                                    PARTNER
-                                </option>
+</div>
 
-                            </select>
 
-                        </div>
+<!-- MEMBERS -->
 
+<div
+    class="panel active"
+    id="members"
+>
 
-                        <div class="field">
+<div class="card">
 
-                            <label>
-                                WhatsApp
-                            </label>
+<h2>Members</h2>
 
-                            <input
-                                id="whatsapp"
-                                placeholder="60123456789"
-                            >
+<p class="card-desc">
+Manage trusted list members and Featured Profiles.
+</p>
 
-                        </div>
+<div class="table-wrap">
 
+<table>
 
-                        <div class="field">
+<thead>
 
-                            <label>
-                                Status
-                            </label>
+<tr>
+    <th>Username</th>
+    <th>Role</th>
+    <th>Status</th>
+    <th>Verified</th>
+    <th>Featured</th>
+    <th>Actions</th>
+</tr>
 
-                            <select id="status">
+</thead>
 
-                                <option value="TRUSTED">
-                                    TRUSTED
-                                </option>
+<tbody id="membersTable">
 
-                                <option value="SUSPENDED">
-                                    SUSPENDED
-                                </option>
+<tr>
+    <td colspan="6">
+        Loading...
+    </td>
+</tr>
 
-                            </select>
+</tbody>
 
-                        </div>
+</table>
 
+</div>
 
-                        <div class="field">
+</div>
 
-                            <label>
-                                Verification
-                            </label>
+</div>
 
-                            <select id="verified">
 
-                                <option value="true">
-                                    VERIFIED
-                                </option>
+<!-- ADD MEMBER -->
 
-                                <option value="false">
-                                    UNVERIFIED
-                                </option>
+<div
+    class="panel"
+    id="addMember"
+>
 
-                            </select>
+<div class="card">
 
-                        </div>
+<h2>Add Member</h2>
 
+<p class="card-desc">
+Create or edit an MTLS trusted list profile.
+</p>
 
-                        <div class="field full">
+<form id="memberForm">
 
-                            <label>
-                                Description
-                            </label>
+<input
+    type="hidden"
+    id="editingId"
+>
 
-                            <textarea
-                                id="description"
-                                placeholder="Member description..."
-                            ></textarea>
+<div class="form-grid">
 
-                        </div>
+<div class="field">
 
-                    </div>
+<label>Username</label>
 
+<input
+    id="username"
+    required
+    placeholder="Example: luffy"
+>
 
-                    <div class="form-actions">
+</div>
 
-                        <button
-                            type="submit"
-                            class="primary"
-                            id="saveMemberBtn"
-                        >
-                            ADD MEMBER
-                        </button>
 
-                        <button
-                            type="button"
-                            class="secondary"
-                            onclick="resetMemberForm()"
-                        >
-                            CLEAR
-                        </button>
+<div class="field">
 
-                    </div>
+<label>Display Name</label>
 
-                </form>
+<input
+    id="displayName"
+    required
+    placeholder="Example: Luffy Store"
+>
 
-            </div>
+</div>
 
-        </div>
 
+<div class="field">
 
-        <!-- ADMINS -->
+<label>Role</label>
 
-        <div
-            class="panel"
-            id="admins"
-        >
+<select id="role">
 
-            <div class="card">
+<option value="MEMBER">MEMBER</option>
+<option value="ADMIN">ADMIN</option>
+<option value="OWNER">OWNER</option>
+<option value="PARTNER">PARTNER</option>
 
-                <h2>Admins</h2>
+</select>
 
-                <p class="card-desc">
-                    Manage authorized MTLS administrators.
-                </p>
+</div>
 
-                <div class="form-grid">
 
-                    <div class="field">
+<div class="field">
 
-                        <label>
-                            Admin Email
-                        </label>
+<label>WhatsApp</label>
 
-                        <input
-                            id="newAdminEmail"
-                            type="email"
-                            placeholder="admin@example.com"
-                        >
+<input
+    id="whatsapp"
+    placeholder="60123456789"
+>
 
-                    </div>
+</div>
 
-                    <div class="field">
 
-                        <label>
-                            Admin Role
-                        </label>
+<div class="field">
 
-                        <select id="newAdminRole">
+<label>Status</label>
 
-                            <option value="ADMIN">
-                                ADMIN
-                            </option>
+<select id="status">
 
-                            <option value="OWNER">
-                                OWNER
-                            </option>
+<option value="TRUSTED">TRUSTED</option>
+<option value="SUSPENDED">SUSPENDED</option>
 
-                        </select>
+</select>
 
-                    </div>
+</div>
 
-                </div>
 
-                <div class="form-actions">
+<div class="field">
 
-                    <button
-                        class="primary"
-                        onclick="addAdmin()"
-                    >
-                        ADD ADMIN
-                    </button>
+<label>Verification</label>
 
-                </div>
+<select id="verified">
 
-            </div>
+<option value="true">VERIFIED</option>
+<option value="false">UNVERIFIED</option>
 
+</select>
 
-            <div class="card">
+</div>
 
-                <div class="table-wrap">
 
-                    <table>
+<div class="field">
 
-                        <thead>
+<label>Featured Profile</label>
 
-                            <tr>
-                                <th>Email</th>
-                                <th>Role</th>
-                                <th>Added</th>
-                                <th>Action</th>
-                            </tr>
+<div class="checkbox-field">
 
-                        </thead>
+<input
+    type="checkbox"
+    id="featured"
+>
 
-                        <tbody id="adminsTable">
+<label for="featured">
+    Show in Featured Profiles
+</label>
 
-                            <tr>
-                                <td colspan="4">
-                                    Loading...
-                                </td>
-                            </tr>
+</div>
 
-                        </tbody>
+<div class="feature-note">
+Only OWNER, ADMIN and PARTNER can be Featured.
+</div>
 
-                    </table>
+</div>
 
-                </div>
 
-            </div>
+<div class="field full">
 
-        </div>
+<label>Description</label>
 
+<textarea
+    id="description"
+    placeholder="Member description..."
+></textarea>
 
-        <!-- REVIEWS -->
+</div>
 
-        <div
-            class="panel"
-            id="reviews"
-        >
+</div>
 
-            <div class="card">
 
-                <h2>Reviews</h2>
+<div class="form-actions">
 
-                <p class="card-desc">
-                    Moderate member reviews.
-                </p>
+<button
+    type="submit"
+    class="primary"
+    id="saveMemberBtn"
+>
+ADD MEMBER
+</button>
 
-                <div class="table-wrap">
+<button
+    type="button"
+    class="secondary"
+    onclick="resetMemberForm()"
+>
+CLEAR
+</button>
 
-                    <table>
+</div>
 
-                        <thead>
+</form>
 
-                            <tr>
-                                <th>Reviewer</th>
-                                <th>Rating</th>
-                                <th>Review</th>
-                                <th>Status</th>
-                                <th>Action</th>
-                            </tr>
+</div>
 
-                        </thead>
+</div>
 
-                        <tbody id="reviewsTable">
 
-                            <tr>
-                                <td colspan="5">
-                                    Loading...
-                                </td>
-                            </tr>
+<!-- ADMINS -->
 
-                        </tbody>
+<div
+    class="panel"
+    id="admins"
+>
 
-                    </table>
+<div class="card">
 
-                </div>
+<h2>Admins</h2>
 
-            </div>
+<p class="card-desc">
+Manage authorized MTLS administrators.
+</p>
 
-        </div>
+<div class="form-grid">
 
+<div class="field">
 
-        <!-- AUDIT LOGS -->
+<label>Admin Email</label>
 
-        <div
-            class="panel"
-            id="logs"
-        >
+<input
+    id="newAdminEmail"
+    type="email"
+    placeholder="admin@example.com"
+>
 
-            <div class="card">
+</div>
 
-                <h2>Audit Logs</h2>
+<div class="field">
 
-                <p class="card-desc">
-                    Every important admin action is recorded here.
-                </p>
+<label>Admin Role</label>
 
-                <div id="logsList">
+<select id="newAdminRole">
 
-                    Loading...
+<option value="ADMIN">ADMIN</option>
+<option value="OWNER">OWNER</option>
 
-                </div>
+</select>
 
-            </div>
+</div>
 
-        </div>
+</div>
 
-    </main>
+<div class="form-actions">
+
+<button
+    class="primary"
+    onclick="addAdmin()"
+>
+ADD ADMIN
+</button>
+
+</div>
+
+</div>
+
+
+<div class="card">
+
+<div class="table-wrap">
+
+<table>
+
+<thead>
+
+<tr>
+    <th>Email</th>
+    <th>Role</th>
+    <th>Added</th>
+    <th>Action</th>
+</tr>
+
+</thead>
+
+<tbody id="adminsTable">
+
+<tr>
+    <td colspan="4">
+        Loading...
+    </td>
+</tr>
+
+</tbody>
+
+</table>
+
+</div>
+
+</div>
+
+</div>
+
+
+<!-- REVIEWS -->
+
+<div
+    class="panel"
+    id="reviews"
+>
+
+<div class="card">
+
+<h2>Reviews</h2>
+
+<p class="card-desc">
+Moderate member reviews.
+</p>
+
+<div class="table-wrap">
+
+<table>
+
+<thead>
+
+<tr>
+    <th>Reviewer</th>
+    <th>Rating</th>
+    <th>Review</th>
+    <th>Status</th>
+    <th>Action</th>
+</tr>
+
+</thead>
+
+<tbody id="reviewsTable">
+
+<tr>
+    <td colspan="5">
+        Loading...
+    </td>
+</tr>
+
+</tbody>
+
+</table>
+
+</div>
+
+</div>
+
+</div>
+
+
+<!-- LOGS -->
+
+<div
+    class="panel"
+    id="logs"
+>
+
+<div class="card">
+
+<h2>Audit Logs</h2>
+
+<p class="card-desc">
+Every important admin action is recorded here.
+</p>
+
+<div id="logsList">
+Loading...
+</div>
+
+</div>
+
+</div>
+
+</main>
 
 </section>
 
@@ -1109,9 +1086,7 @@ td{
 
 <script>
 
-/* =========================================================
-   SUPABASE CONFIG
-   ========================================================= */
+/* SUPABASE */
 
 const SUPABASE_URL =
     "https://tmvqcmiyjknefaafitav.supabase.co";
@@ -1120,15 +1095,13 @@ const SUPABASE_ANON_KEY =
     "sb_publishable_bUrV_nUC6hioAg8RW6XbEA_U436y-0S";
 
 const supabaseClient =
-    supabase.createClient(
+    window.supabase.createClient(
         SUPABASE_URL,
         SUPABASE_ANON_KEY
     );
 
 
-/* =========================================================
-   HELPERS
-   ========================================================= */
+/* HELPERS */
 
 function toast(message){
 
@@ -1136,13 +1109,10 @@ function toast(message){
         document.getElementById("toast");
 
     el.textContent = message;
-
     el.style.display = "block";
 
     setTimeout(() => {
-
         el.style.display = "none";
-
     },3000);
 
 }
@@ -1160,62 +1130,74 @@ function escapeHTML(value){
 }
 
 
-/* =========================================================
-   LOGIN
-   ========================================================= */
+/* LOGIN */
 
 document
     .getElementById("loginForm")
-    .addEventListener("submit", async function(e){
+    .addEventListener(
+        "submit",
+        async function(e){
 
-        e.preventDefault();
+            e.preventDefault();
 
-        const email =
-            document.getElementById("email").value.trim();
+            const email =
+                document
+                    .getElementById("email")
+                    .value
+                    .trim();
 
-        const password =
-            document.getElementById("password").value;
+            const password =
+                document
+                    .getElementById("password")
+                    .value;
 
-        const error =
-            document.getElementById("loginError");
+            const error =
+                document
+                    .getElementById("loginError");
 
-        const btn =
-            document.getElementById("loginBtn");
+            const btn =
+                document
+                    .getElementById("loginBtn");
 
-        error.textContent = "";
+            error.textContent = "";
 
-        btn.disabled = true;
+            btn.disabled = true;
+            btn.textContent = "SIGNING IN...";
 
-        btn.textContent = "SIGNING IN...";
 
-        const { error:loginError } =
-            await supabaseClient.auth.signInWithPassword({
-                email,
-                password
-            });
+            const {
+                error:loginError
+            } =
+                await supabaseClient.auth
+                    .signInWithPassword({
+                        email,
+                        password
+                    });
 
-        if(loginError){
 
-            error.textContent =
-                loginError.message;
+            if(loginError){
+
+                error.textContent =
+                    loginError.message;
+
+                btn.disabled = false;
+                btn.textContent = "SIGN IN";
+
+                return;
+
+            }
+
+
+            await checkAdmin();
 
             btn.disabled = false;
             btn.textContent = "SIGN IN";
 
-            return;
         }
-
-        await checkAdmin();
-
-        btn.disabled = false;
-        btn.textContent = "SIGN IN";
-
-    });
+    );
 
 
-/* =========================================================
-   CHECK SESSION / ADMIN
-   ========================================================= */
+/* CHECK ADMIN */
 
 async function checkAdmin(){
 
@@ -1242,7 +1224,9 @@ async function checkAdmin(){
     } =
         await supabaseClient
             .from("admins")
-            .select("id,email,role,active")
+            .select(
+                "id,email,role,active"
+            )
             .eq("user_id",user.id)
             .eq("active",true)
             .maybeSingle();
@@ -1252,8 +1236,10 @@ async function checkAdmin(){
 
         await supabaseClient.auth.signOut();
 
-        document.getElementById("loginError").textContent =
-            "This account is not authorized as an MTLS admin.";
+        document
+            .getElementById("loginError")
+            .textContent =
+                "This account is not authorized as an MTLS admin.";
 
         showLogin();
 
@@ -1262,8 +1248,10 @@ async function checkAdmin(){
     }
 
 
-    document.getElementById("adminRole").textContent =
-        admin.role;
+    document
+        .getElementById("adminRole")
+        .textContent =
+            admin.role;
 
 
     showDashboard();
@@ -1308,9 +1296,7 @@ async function logout(){
 }
 
 
-/* =========================================================
-   TABS
-   ========================================================= */
+/* TABS */
 
 function showTab(id,button){
 
@@ -1335,9 +1321,7 @@ function showTab(id,button){
 }
 
 
-/* =========================================================
-   LOAD EVERYTHING
-   ========================================================= */
+/* LOAD EVERYTHING */
 
 async function loadEverything(){
 
@@ -1352,9 +1336,7 @@ async function loadEverything(){
 }
 
 
-/* =========================================================
-   STATS
-   ========================================================= */
+/* STATS */
 
 async function loadStats(){
 
@@ -1363,7 +1345,10 @@ async function loadStats(){
     } =
         await supabaseClient
             .from("profiles")
-            .select("*",{count:"exact",head:true});
+            .select("*",{
+                count:"exact",
+                head:true
+            });
 
 
     const {
@@ -1371,7 +1356,10 @@ async function loadStats(){
     } =
         await supabaseClient
             .from("profiles")
-            .select("*",{count:"exact",head:true})
+            .select("*",{
+                count:"exact",
+                head:true
+            })
             .eq("verified",true);
 
 
@@ -1380,7 +1368,10 @@ async function loadStats(){
     } =
         await supabaseClient
             .from("profiles")
-            .select("*",{count:"exact",head:true})
+            .select("*",{
+                count:"exact",
+                head:true
+            })
             .eq("status","TRUSTED");
 
 
@@ -1389,27 +1380,36 @@ async function loadStats(){
     } =
         await supabaseClient
             .from("reviews")
-            .select("*",{count:"exact",head:true});
+            .select("*",{
+                count:"exact",
+                head:true
+            });
 
 
-    document.getElementById("totalMembers")
-        .textContent = members ?? 0;
+    document
+        .getElementById("totalMembers")
+        .textContent =
+            members ?? 0;
 
-    document.getElementById("totalVerified")
-        .textContent = verified ?? 0;
+    document
+        .getElementById("totalVerified")
+        .textContent =
+            verified ?? 0;
 
-    document.getElementById("totalTrusted")
-        .textContent = trusted ?? 0;
+    document
+        .getElementById("totalTrusted")
+        .textContent =
+            trusted ?? 0;
 
-    document.getElementById("totalReviews")
-        .textContent = reviews ?? 0;
+    document
+        .getElementById("totalReviews")
+        .textContent =
+            reviews ?? 0;
 
 }
 
 
-/* =========================================================
-   MEMBERS
-   ========================================================= */
+/* MEMBERS */
 
 async function loadMembers(){
 
@@ -1424,27 +1424,38 @@ async function loadMembers(){
         await supabaseClient
             .from("profiles")
             .select("*")
-            .order("created_at",{ascending:false});
+            .order(
+                "created_at",
+                {ascending:false}
+            );
 
 
     if(error){
 
         tbody.innerHTML =
-            `<tr><td colspan="5">
-                ${escapeHTML(error.message)}
-            </td></tr>`;
+            `
+            <tr>
+                <td colspan="6">
+                    ${escapeHTML(error.message)}
+                </td>
+            </tr>
+            `;
 
         return;
 
     }
 
 
-    if(!data || data.length === 0){
+    if(!data || !data.length){
 
         tbody.innerHTML =
-            `<tr><td colspan="5">
-                No members yet.
-            </td></tr>`;
+            `
+            <tr>
+                <td colspan="6">
+                    No members yet.
+                </td>
+            </tr>
+            `;
 
         return;
 
@@ -1452,202 +1463,354 @@ async function loadMembers(){
 
 
     tbody.innerHTML =
-        data.map(member => `
+        data.map(member => {
 
-            <tr>
+            const canFeature =
+                ["OWNER","ADMIN","PARTNER"]
+                    .includes(
+                        String(member.role || "")
+                            .toUpperCase()
+                    );
 
-                <td>
-                    <strong>
-                        ${escapeHTML(member.display_name || member.username)}
-                    </strong>
-                    <br>
-                    <small style="color:#657287">
-                        @${escapeHTML(member.username)}
-                    </small>
-                </td>
 
-                <td>
-                    ${escapeHTML(member.role)}
-                </td>
+            return `
 
-                <td>
+                <tr>
 
-                    <span class="badge ${
-                        member.status === "TRUSTED"
-                        ? "trusted"
-                        : "suspended"
-                    }">
+                    <td>
 
-                        ${escapeHTML(member.status)}
+                        <strong>
+                            ${escapeHTML(
+                                member.display_name ||
+                                member.username
+                            )}
+                        </strong>
 
-                    </span>
+                        <br>
 
-                </td>
+                        <small style="color:#657287">
+                            @${escapeHTML(
+                                member.username
+                            )}
+                        </small>
 
-                <td>
+                    </td>
 
-                    <span class="badge ${
-                        member.verified
-                        ? "verified"
-                        : ""
-                    }">
 
-                        ${member.verified
-                            ? "VERIFIED"
-                            : "UNVERIFIED"}
+                    <td>
+                        ${escapeHTML(
+                            member.role
+                        )}
+                    </td>
 
-                    </span>
 
-                </td>
+                    <td>
 
-                <td>
+                        <span class="badge ${
+                            member.status === "TRUSTED"
+                            ? "trusted"
+                            : "suspended"
+                        }">
 
-                    <div class="actions">
+                            ${escapeHTML(
+                                member.status
+                            )}
 
-                        <button
-                            class="action"
-                            onclick="editMember('${member.id}')"
-                        >
-                            Edit
-                        </button>
+                        </span>
 
-                        <button
-                            class="action"
-                            onclick="toggleVerify('${member.id}',${!member.verified})"
-                        >
-                            ${member.verified
-                                ? "Unverify"
-                                : "Verify"}
-                        </button>
+                    </td>
 
-                        <button
-                            class="action"
-                            onclick="toggleStatus('${member.id}','${member.status}')"
-                        >
+
+                    <td>
+
+                        <span class="badge ${
+                            member.verified
+                            ? "verified"
+                            : ""
+                        }">
+
                             ${
-                                member.status === "TRUSTED"
-                                ? "Suspend"
-                                : "Trust"
+                                member.verified
+                                ? "VERIFIED"
+                                : "UNVERIFIED"
                             }
-                        </button>
 
-                        <button
-                            class="action danger"
-                            onclick="deleteMember('${member.id}')"
-                        >
-                            Remove
-                        </button>
+                        </span>
 
-                    </div>
+                    </td>
 
-                </td>
 
-            </tr>
+                    <td>
 
-        `).join("");
+                        ${
+                            member.featured && canFeature
+
+                            ? `
+                                <span class="badge featured">
+                                    ★ FEATURED
+                                </span>
+                              `
+
+                            : `
+                                <span class="badge not-featured">
+                                    ${canFeature
+                                        ? "NOT FEATURED"
+                                        : "MEMBER"}
+                                </span>
+                              `
+                        }
+
+                    </td>
+
+
+                    <td>
+
+                        <div class="actions">
+
+                            <button
+                                class="action"
+                                onclick="editMember('${member.id}')"
+                            >
+                                Edit
+                            </button>
+
+
+                            <button
+                                class="action"
+                                onclick="toggleVerify(
+                                    '${member.id}',
+                                    ${!member.verified}
+                                )"
+                            >
+                                ${
+                                    member.verified
+                                    ? "Unverify"
+                                    : "Verify"
+                                }
+                            </button>
+
+
+                            <button
+                                class="action"
+                                onclick="toggleStatus(
+                                    '${member.id}',
+                                    '${member.status}'
+                                )"
+                            >
+                                ${
+                                    member.status === "TRUSTED"
+                                    ? "Suspend"
+                                    : "Trust"
+                                }
+                            </button>
+
+
+                            ${
+                                canFeature
+
+                                ? `
+                                    <button
+                                        class="action feature-action"
+                                        onclick="toggleFeatured(
+                                            '${member.id}',
+                                            ${member.featured ? "true" : "false"}
+                                        )"
+                                    >
+                                        ${
+                                            member.featured
+                                            ? "★ Unfeature"
+                                            : "☆ Feature"
+                                        }
+                                    </button>
+                                  `
+
+                                : ""
+                            }
+
+
+                            <button
+                                class="action danger"
+                                onclick="deleteMember('${member.id}')"
+                            >
+                                Remove
+                            </button>
+
+                        </div>
+
+                    </td>
+
+                </tr>
+
+            `;
+
+        }).join("");
 
 }
 
 
-/* =========================================================
-   ADD / EDIT MEMBER
-   ========================================================= */
+/* ADD / EDIT MEMBER */
 
 document
     .getElementById("memberForm")
-    .addEventListener("submit",async function(e){
+    .addEventListener(
+        "submit",
+        async function(e){
 
-        e.preventDefault();
-
-
-        const editingId =
-            document.getElementById("editingId").value;
+            e.preventDefault();
 
 
-        const member = {
-
-            username:
-                document.getElementById("username")
-                    .value.trim(),
-
-            display_name:
-                document.getElementById("displayName")
-                    .value.trim(),
-
-            role:
-                document.getElementById("role")
-                    .value,
-
-            whatsapp:
-                document.getElementById("whatsapp")
-                    .value.trim(),
-
-            status:
-                document.getElementById("status")
-                    .value,
-
-            verified:
-                document.getElementById("verified")
-                    .value === "true",
-
-            description:
-                document.getElementById("description")
-                    .value.trim()
-
-        };
+            const editingId =
+                document
+                    .getElementById("editingId")
+                    .value;
 
 
-        let error;
+            const selectedRole =
+                document
+                    .getElementById("role")
+                    .value;
 
 
-        if(editingId){
+            /*
+                MEMBER CAN NEVER BE FEATURED
+            */
 
-            ({
-                error
-            } =
-                await supabaseClient
-                    .from("profiles")
-                    .update(member)
-                    .eq("id",editingId));
+            const wantsFeatured =
+                document
+                    .getElementById("featured")
+                    .checked;
 
-        }else{
 
-            ({
-                error
-            } =
-                await supabaseClient
-                    .from("profiles")
-                    .insert(member));
+            const isAllowedFeatured =
+                ["OWNER","ADMIN","PARTNER"]
+                    .includes(selectedRole);
+
+
+            const member = {
+
+                username:
+                    document
+                        .getElementById("username")
+                        .value
+                        .trim(),
+
+                display_name:
+                    document
+                        .getElementById("displayName")
+                        .value
+                        .trim(),
+
+                role:
+                    selectedRole,
+
+                whatsapp:
+                    document
+                        .getElementById("whatsapp")
+                        .value
+                        .trim(),
+
+                status:
+                    document
+                        .getElementById("status")
+                        .value,
+
+                verified:
+                    document
+                        .getElementById("verified")
+                        .value === "true",
+
+                description:
+                    document
+                        .getElementById("description")
+                        .value
+                        .trim(),
+
+                featured:
+                    isAllowedFeatured
+                    ? wantsFeatured
+                    : false
+
+            };
+
+
+            let error;
+
+
+            if(editingId){
+
+                ({
+                    error
+                } =
+                    await supabaseClient
+                        .from("profiles")
+                        .update(member)
+                        .eq("id",editingId));
+
+            }else{
+
+                ({
+                    error
+                } =
+                    await supabaseClient
+                        .from("profiles")
+                        .insert(member));
+
+            }
+
+
+            if(error){
+
+                toast(error.message);
+
+                return;
+
+            }
+
+
+            await writeAudit(
+                editingId
+                ? "UPDATE_PROFILE"
+                : "ADD_PROFILE",
+                editingId || null,
+                {
+                    username:member.username,
+                    role:member.role,
+                    featured:member.featured
+                }
+            );
+
+
+            toast(
+                editingId
+                ? "Member updated."
+                : "Member added."
+            );
+
+
+            await loadEverything();
+
+            resetMemberForm();
+
+
+            const membersTab =
+                [...document.querySelectorAll(".tab")]
+                    .find(
+                        x =>
+                        x.textContent.trim()
+                        === "Members"
+                    );
+
+
+            showTab(
+                "members",
+                membersTab
+            );
 
         }
+    );
 
 
-        if(error){
-
-            toast(error.message);
-
-            return;
-
-        }
-
-
-        toast(
-            editingId
-            ? "Member updated."
-            : "Member added."
-        );
-
-
-        await loadEverything();
-
-        resetMemberForm();
-
-        document
-            .querySelector(".tab")
-            .click();
-
-    });
-
+/* EDIT */
 
 async function editMember(id){
 
@@ -1671,62 +1834,275 @@ async function editMember(id){
     }
 
 
-    document.getElementById("editingId")
-        .value = data.id;
+    document
+        .getElementById("editingId")
+        .value =
+            data.id;
 
-    document.getElementById("username")
-        .value = data.username || "";
 
-    document.getElementById("displayName")
-        .value = data.display_name || "";
+    document
+        .getElementById("username")
+        .value =
+            data.username || "";
 
-    document.getElementById("role")
-        .value = data.role || "MEMBER";
 
-    document.getElementById("whatsapp")
-        .value = data.whatsapp || "";
+    document
+        .getElementById("displayName")
+        .value =
+            data.display_name || "";
 
-    document.getElementById("status")
-        .value = data.status || "TRUSTED";
 
-    document.getElementById("verified")
-        .value = String(data.verified);
+    document
+        .getElementById("role")
+        .value =
+            data.role || "MEMBER";
 
-    document.getElementById("description")
-        .value = data.description || "";
 
-    document.getElementById("saveMemberBtn")
-        .textContent = "SAVE CHANGES";
+    document
+        .getElementById("whatsapp")
+        .value =
+            data.whatsapp || "";
+
+
+    document
+        .getElementById("status")
+        .value =
+            data.status || "TRUSTED";
+
+
+    document
+        .getElementById("verified")
+        .value =
+            String(data.verified);
+
+
+    document
+        .getElementById("description")
+        .value =
+            data.description || "";
+
+
+    const allowed =
+        ["OWNER","ADMIN","PARTNER"]
+            .includes(
+                String(data.role || "")
+                    .toUpperCase()
+            );
+
+
+    const featuredCheckbox =
+        document
+            .getElementById("featured");
+
+
+    featuredCheckbox.checked =
+        allowed && data.featured === true;
+
+
+    featuredCheckbox.disabled =
+        !allowed;
+
+
+    document
+        .getElementById("saveMemberBtn")
+        .textContent =
+            "SAVE CHANGES";
 
 
     const tab =
         [...document.querySelectorAll(".tab")]
-            .find(x => x.textContent.includes("Add Member"));
+            .find(
+                x =>
+                x.textContent.includes(
+                    "Add Member"
+                )
+            );
 
-    showTab("addMember",tab);
+
+    showTab(
+        "addMember",
+        tab
+    );
 
 }
 
+
+/* ROLE CHANGE */
+
+document
+    .getElementById("role")
+    .addEventListener(
+        "change",
+        function(){
+
+            const featured =
+                document
+                    .getElementById("featured");
+
+
+            const allowed =
+                ["OWNER","ADMIN","PARTNER"]
+                    .includes(this.value);
+
+
+            if(!allowed){
+
+                featured.checked = false;
+                featured.disabled = true;
+
+            }else{
+
+                featured.disabled = false;
+
+            }
+
+        }
+    );
+
+
+/* RESET */
 
 function resetMemberForm(){
 
-    document.getElementById("memberForm")
+    document
+        .getElementById("memberForm")
         .reset();
 
-    document.getElementById("editingId")
+
+    document
+        .getElementById("editingId")
         .value = "";
 
-    document.getElementById("saveMemberBtn")
-        .textContent = "ADD MEMBER";
+
+    document
+        .getElementById("saveMemberBtn")
+        .textContent =
+            "ADD MEMBER";
+
+
+    document
+        .getElementById("featured")
+        .disabled = false;
 
 }
 
 
-/* =========================================================
-   VERIFY
-   ========================================================= */
+/* FEATURE */
 
-async function toggleVerify(id,value){
+async function toggleFeatured(
+    id,
+    currentValue
+){
+
+    const {
+        data:member,
+        error:fetchError
+    } =
+        await supabaseClient
+            .from("profiles")
+            .select(
+                "id,role,featured"
+            )
+            .eq("id",id)
+            .single();
+
+
+    if(fetchError){
+
+        toast(fetchError.message);
+
+        return;
+
+    }
+
+
+    const role =
+        String(member.role || "")
+            .toUpperCase();
+
+
+    /*
+       MEMBER CAN NEVER BE FEATURED
+    */
+
+    if(role === "MEMBER"){
+
+        toast(
+            "MEMBER profiles cannot be Featured."
+        );
+
+        return;
+
+    }
+
+
+    if(
+        !["OWNER","ADMIN","PARTNER"]
+            .includes(role)
+    ){
+
+        toast(
+            "Only OWNER, ADMIN or PARTNER can be Featured."
+        );
+
+        return;
+
+    }
+
+
+    const newValue =
+        !currentValue;
+
+
+    const {
+        error
+    } =
+        await supabaseClient
+            .from("profiles")
+            .update({
+                featured:newValue
+            })
+            .eq("id",id);
+
+
+    if(error){
+
+        toast(error.message);
+
+        return;
+
+    }
+
+
+    await writeAudit(
+        newValue
+        ? "FEATURE_PROFILE"
+        : "UNFEATURE_PROFILE",
+        id,
+        {
+            featured:newValue
+        }
+    );
+
+
+    toast(
+        newValue
+        ? "Profile Featured."
+        : "Profile removed from Featured."
+    );
+
+
+    await loadEverything();
+
+}
+
+
+/* VERIFY */
+
+async function toggleVerify(
+    id,
+    value
+){
 
     const {
         error
@@ -1763,16 +2139,18 @@ async function toggleVerify(id,value){
         : "Member unverified."
     );
 
+
     await loadEverything();
 
 }
 
 
-/* =========================================================
-   STATUS
-   ========================================================= */
+/* STATUS */
 
-async function toggleStatus(id,current){
+async function toggleStatus(
+    id,
+    current
+){
 
     const newStatus =
         current === "TRUSTED"
@@ -1810,17 +2188,17 @@ async function toggleStatus(id,current){
 
 
     toast(
-        "Status changed to " + newStatus
+        "Status changed to " +
+        newStatus
     );
+
 
     await loadEverything();
 
 }
 
 
-/* =========================================================
-   DELETE MEMBER
-   ========================================================= */
+/* DELETE */
 
 async function deleteMember(id){
 
@@ -1863,9 +2241,7 @@ async function deleteMember(id){
 }
 
 
-/* =========================================================
-   ADMINS
-   ========================================================= */
+/* ADMINS */
 
 async function loadAdmins(){
 
@@ -1880,15 +2256,24 @@ async function loadAdmins(){
         await supabaseClient
             .from("admins")
             .select("*")
-            .order("created_at",{ascending:false});
+            .order(
+                "created_at",
+                {ascending:false}
+            );
 
 
     if(error){
 
         tbody.innerHTML =
-            `<tr><td colspan="4">
-                ${escapeHTML(error.message)}
-            </td></tr>`;
+            `
+            <tr>
+                <td colspan="4">
+                    ${escapeHTML(
+                        error.message
+                    )}
+                </td>
+            </tr>
+            `;
 
         return;
 
@@ -1898,9 +2283,13 @@ async function loadAdmins(){
     if(!data?.length){
 
         tbody.innerHTML =
-            `<tr><td colspan="4">
-                No admins found.
-            </td></tr>`;
+            `
+            <tr>
+                <td colspan="4">
+                    No admins found.
+                </td>
+            </tr>
+            `;
 
         return;
 
@@ -1913,11 +2302,15 @@ async function loadAdmins(){
             <tr>
 
                 <td>
-                    ${escapeHTML(admin.email)}
+                    ${escapeHTML(
+                        admin.email
+                    )}
                 </td>
 
                 <td>
-                    ${escapeHTML(admin.role)}
+                    ${escapeHTML(
+                        admin.role
+                    )}
                 </td>
 
                 <td>
@@ -1944,20 +2337,27 @@ async function loadAdmins(){
 }
 
 
+/* ADD ADMIN */
+
 async function addAdmin(){
 
     const email =
-        document.getElementById("newAdminEmail")
-            .value.trim();
+        document
+            .getElementById("newAdminEmail")
+            .value
+            .trim();
 
     const role =
-        document.getElementById("newAdminRole")
+        document
+            .getElementById("newAdminRole")
             .value;
 
 
     if(!email){
 
-        toast("Enter admin email.");
+        toast(
+            "Enter admin email."
+        );
 
         return;
 
@@ -1966,40 +2366,32 @@ async function addAdmin(){
 
     /*
        IMPORTANT:
-       Creating the Supabase Auth user should be done
-       through a secure server/Edge Function, NOT by
-       exposing a service-role key in this HTML.
-
-       This button therefore expects the email to belong
-       to an existing Supabase Auth user.
+       RPC parameter is target_email.
     */
 
-
     const {
-        data:userList,
+        data:userId,
         error
     } =
         await supabaseClient
             .rpc(
                 "find_user_id_by_email",
                 {
-                    lookup_email:email
+                    target_email:email
                 }
             );
 
 
     if(error){
 
-        toast(
-            "Create the secure RPC first."
-        );
+        toast(error.message);
 
         return;
 
     }
 
 
-    if(!userList){
+    if(!userId){
 
         toast(
             "No Supabase Auth user found."
@@ -2016,7 +2408,7 @@ async function addAdmin(){
         await supabaseClient
             .from("admins")
             .insert({
-                user_id:userList,
+                user_id:userId,
                 email,
                 role,
                 active:true
@@ -2025,7 +2417,9 @@ async function addAdmin(){
 
     if(insertError){
 
-        toast(insertError.message);
+        toast(
+            insertError.message
+        );
 
         return;
 
@@ -2042,8 +2436,10 @@ async function addAdmin(){
     );
 
 
-    document.getElementById("newAdminEmail")
+    document
+        .getElementById("newAdminEmail")
         .value = "";
+
 
     toast("Admin added.");
 
@@ -2051,6 +2447,8 @@ async function addAdmin(){
 
 }
 
+
+/* REMOVE ADMIN */
 
 async function removeAdmin(id){
 
@@ -2095,9 +2493,7 @@ async function removeAdmin(id){
 }
 
 
-/* =========================================================
-   REVIEWS
-   ========================================================= */
+/* REVIEWS */
 
 async function loadReviews(){
 
@@ -2121,15 +2517,24 @@ async function loadReviews(){
                     username
                 )
             `)
-            .order("created_at",{ascending:false});
+            .order(
+                "created_at",
+                {ascending:false}
+            );
 
 
     if(error){
 
         tbody.innerHTML =
-            `<tr><td colspan="5">
-                ${escapeHTML(error.message)}
-            </td></tr>`;
+            `
+            <tr>
+                <td colspan="5">
+                    ${escapeHTML(
+                        error.message
+                    )}
+                </td>
+            </tr>
+            `;
 
         return;
 
@@ -2139,9 +2544,13 @@ async function loadReviews(){
     if(!data?.length){
 
         tbody.innerHTML =
-            `<tr><td colspan="5">
-                No reviews yet.
-            </td></tr>`;
+            `
+            <tr>
+                <td colspan="5">
+                    No reviews yet.
+                </td>
+            </tr>
+            `;
 
         return;
 
@@ -2154,19 +2563,27 @@ async function loadReviews(){
             <tr>
 
                 <td>
-                    ${escapeHTML(review.reviewer_name)}
+                    ${escapeHTML(
+                        review.reviewer_name
+                    )}
                 </td>
 
                 <td>
-                    ${"★".repeat(review.rating)}
+                    ${"★".repeat(
+                        Number(review.rating) || 0
+                    )}
                 </td>
 
                 <td>
-                    ${escapeHTML(review.review)}
+                    ${escapeHTML(
+                        review.review
+                    )}
                 </td>
 
                 <td>
-                    ${escapeHTML(review.status)}
+                    ${escapeHTML(
+                        review.status
+                    )}
                 </td>
 
                 <td>
@@ -2177,7 +2594,10 @@ async function loadReviews(){
                         ? `
                             <button
                                 class="action danger"
-                                onclick="moderateReview('${review.id}','REJECTED')"
+                                onclick="moderateReview(
+                                    '${review.id}',
+                                    'REJECTED'
+                                )"
                             >
                                 Reject
                             </button>
@@ -2186,7 +2606,10 @@ async function loadReviews(){
                         : `
                             <button
                                 class="action"
-                                onclick="moderateReview('${review.id}','APPROVED')"
+                                onclick="moderateReview(
+                                    '${review.id}',
+                                    'APPROVED'
+                                )"
                             >
                                 Approve
                             </button>
@@ -2202,7 +2625,10 @@ async function loadReviews(){
 }
 
 
-async function moderateReview(id,status){
+async function moderateReview(
+    id,
+    status
+){
 
     const {
         error
@@ -2233,18 +2659,18 @@ async function moderateReview(id,status){
     );
 
 
-    toast("Review updated.");
+    toast(
+        "Review updated."
+    );
+
 
     await loadReviews();
-
     await loadStats();
 
 }
 
 
-/* =========================================================
-   AUDIT LOGS
-   ========================================================= */
+/* AUDIT */
 
 async function writeAudit(
     action,
@@ -2255,11 +2681,9 @@ async function writeAudit(
     await supabaseClient
         .from("audit_logs")
         .insert({
-
             action,
             target_id:targetId,
             metadata
-
         });
 
 }
@@ -2268,7 +2692,9 @@ async function writeAudit(
 async function loadLogs(){
 
     const container =
-        document.getElementById("logsList");
+        document.getElementById(
+            "logsList"
+        );
 
 
     const {
@@ -2278,7 +2704,10 @@ async function loadLogs(){
         await supabaseClient
             .from("audit_logs")
             .select("*")
-            .order("created_at",{ascending:false})
+            .order(
+                "created_at",
+                {ascending:false}
+            )
             .limit(50);
 
 
@@ -2308,18 +2737,26 @@ async function loadLogs(){
             <div class="log">
 
                 <strong>
-                    ${escapeHTML(log.action)}
+                    ${escapeHTML(
+                        log.action
+                    )}
                 </strong>
 
                 <span>
+
                     ${new Date(
                         log.created_at
                     ).toLocaleString()}
+
                     ${
                         log.target_id
-                        ? " • " + log.target_id
+                        ? " • " +
+                          escapeHTML(
+                              log.target_id
+                          )
                         : ""
                     }
+
                 </span>
 
             </div>
@@ -2329,14 +2766,15 @@ async function loadLogs(){
 }
 
 
-/* =========================================================
-   AUTH STATE
-   ========================================================= */
+/* AUTH STATE */
 
 supabaseClient
     .auth
     .onAuthStateChange(
-        async (event,session) => {
+        async (
+            event,
+            session
+        ) => {
 
             if(session){
 
