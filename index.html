@@ -1,0 +1,914 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>MTLS — Malaysia Trusted List Seller</title>
+
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:Arial,Helvetica,sans-serif;
+}
+
+:root{
+    --bg:#030712;
+    --card:#081120;
+    --blue:#1683ff;
+    --blue2:#0066ff;
+    --text:#f5f7fb;
+    --muted:#8d9bb0;
+    --border:rgba(255,255,255,.08);
+    --green:#21d98b;
+}
+
+html{
+    scroll-behavior:smooth;
+}
+
+body{
+    min-height:100vh;
+    color:var(--text);
+    background:
+        radial-gradient(
+            circle at 20% 0%,
+            rgba(0,102,255,.16),
+            transparent 30%
+        ),
+        radial-gradient(
+            circle at 90% 20%,
+            rgba(0,153,255,.10),
+            transparent 25%
+        ),
+        var(--bg);
+}
+
+/* ================= NAVBAR ================= */
+
+.navbar{
+    position:sticky;
+    top:0;
+    z-index:1000;
+    height:76px;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    padding:0 6%;
+    background:rgba(3,7,18,.78);
+    backdrop-filter:blur(18px);
+    border-bottom:1px solid var(--border);
+}
+
+.brand{
+    display:flex;
+    align-items:center;
+    gap:12px;
+    color:white;
+    text-decoration:none;
+}
+
+.brand img{
+    width:44px;
+    height:44px;
+    object-fit:contain;
+    border-radius:12px;
+    padding:3px;
+    background:#07101f;
+    border:1px solid rgba(22,131,255,.35);
+}
+
+.brand-text{
+    display:flex;
+    flex-direction:column;
+}
+
+.brand-name{
+    font-size:19px;
+    font-weight:800;
+    letter-spacing:.5px;
+}
+
+.brand-sub{
+    color:var(--muted);
+    font-size:10px;
+    margin-top:2px;
+}
+
+.nav-links{
+    display:flex;
+    align-items:center;
+    gap:30px;
+}
+
+.nav-links a{
+    color:#aeb9ca;
+    text-decoration:none;
+    font-size:14px;
+    font-weight:600;
+    transition:.25s;
+}
+
+.nav-links a:hover{
+    color:white;
+}
+
+.nav-admin{
+    padding:10px 17px;
+    border:1px solid rgba(22,131,255,.45);
+    border-radius:10px;
+    color:#70b5ff !important;
+    background:rgba(22,131,255,.08);
+}
+
+.menu-btn{
+    display:none;
+    border:0;
+    background:none;
+    color:white;
+    font-size:26px;
+    cursor:pointer;
+}
+
+/* ================= HERO ================= */
+
+.hero{
+    max-width:1180px;
+    margin:auto;
+    padding:110px 6% 85px;
+    text-align:center;
+}
+
+.badge{
+    display:inline-flex;
+    align-items:center;
+    gap:8px;
+    padding:8px 14px;
+    border-radius:30px;
+    background:rgba(22,131,255,.09);
+    border:1px solid rgba(22,131,255,.25);
+    color:#67afff;
+    font-size:11px;
+    font-weight:800;
+    letter-spacing:1.5px;
+}
+
+.badge-dot{
+    width:7px;
+    height:7px;
+    border-radius:50%;
+    background:var(--blue);
+    box-shadow:0 0 12px var(--blue);
+}
+
+.hero h1{
+    max-width:900px;
+    margin:25px auto 20px;
+    font-size:clamp(44px,7vw,82px);
+    line-height:1;
+    letter-spacing:-3px;
+}
+
+.hero h1 span{
+    color:var(--blue);
+}
+
+.hero p{
+    max-width:650px;
+    margin:auto;
+    color:var(--muted);
+    font-size:16px;
+    line-height:1.7;
+}
+
+.hero-buttons{
+    display:flex;
+    justify-content:center;
+    gap:14px;
+    margin-top:34px;
+    flex-wrap:wrap;
+}
+
+.btn{
+    display:inline-block;
+    padding:14px 22px;
+    border-radius:11px;
+    font-size:13px;
+    font-weight:800;
+    text-decoration:none;
+    transition:.25s;
+}
+
+.btn-primary{
+    color:white;
+    background:linear-gradient(
+        135deg,
+        #1683ff,
+        #005ce6
+    );
+    box-shadow:0 10px 35px rgba(0,102,255,.22);
+}
+
+.btn-primary:hover{
+    transform:translateY(-2px);
+    box-shadow:0 15px 40px rgba(0,102,255,.35);
+}
+
+.btn-secondary{
+    color:#cbd5e1;
+    border:1px solid var(--border);
+    background:rgba(255,255,255,.03);
+}
+
+.btn-secondary:hover{
+    border-color:rgba(22,131,255,.4);
+    background:rgba(22,131,255,.07);
+}
+
+/* ================= TRUSTED LIST ================= */
+
+.section{
+    max-width:1180px;
+    margin:auto;
+    padding:30px 6% 90px;
+}
+
+.section-header{
+    margin-bottom:25px;
+}
+
+.section-title{
+    font-size:29px;
+    font-weight:900;
+}
+
+.section-desc{
+    margin-top:7px;
+    color:var(--muted);
+    font-size:13px;
+}
+
+/* ================= SEARCH ================= */
+
+.search-wrap{
+    margin-bottom:25px;
+}
+
+.search{
+    width:100%;
+    padding:17px 19px;
+    border:1px solid var(--border);
+    border-radius:13px;
+    outline:none;
+    color:white;
+    background:rgba(255,255,255,.035);
+    font-size:14px;
+    transition:.25s;
+}
+
+.search::placeholder{
+    color:#66758a;
+}
+
+.search:focus{
+    border-color:rgba(22,131,255,.55);
+    box-shadow:
+        0 0 0 4px rgba(22,131,255,.07);
+}
+
+/* ================= EMPTY STATE ================= */
+
+.empty{
+    padding:65px 25px;
+    text-align:center;
+    border:1px dashed rgba(255,255,255,.10);
+    border-radius:18px;
+    background:rgba(255,255,255,.018);
+}
+
+.empty-icon{
+    width:52px;
+    height:52px;
+    margin:0 auto 18px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    border-radius:15px;
+    background:rgba(22,131,255,.08);
+    border:1px solid rgba(22,131,255,.16);
+    color:#5daeff;
+    font-size:21px;
+}
+
+.empty h3{
+    font-size:17px;
+    margin-bottom:8px;
+}
+
+.empty p{
+    max-width:450px;
+    margin:auto;
+    color:var(--muted);
+    font-size:12px;
+    line-height:1.6;
+}
+
+/* ================= ABOUT ================= */
+
+.features{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:17px;
+    margin-top:25px;
+}
+
+.feature{
+    padding:25px;
+    border:1px solid var(--border);
+    border-radius:17px;
+    background:rgba(255,255,255,.025);
+}
+
+.feature-icon{
+    width:42px;
+    height:42px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    margin-bottom:18px;
+    border-radius:12px;
+    background:rgba(22,131,255,.1);
+    border:1px solid rgba(22,131,255,.18);
+    color:#55aaff;
+    font-size:19px;
+}
+
+.feature h3{
+    margin-bottom:8px;
+    font-size:16px;
+}
+
+.feature p{
+    color:var(--muted);
+    font-size:12px;
+    line-height:1.6;
+}
+
+/* ================= CTA ================= */
+
+.cta{
+    max-width:1050px;
+    margin:0 auto 90px;
+    padding:0 6%;
+}
+
+.cta-box{
+    padding:45px;
+    text-align:center;
+    border:1px solid rgba(22,131,255,.2);
+    border-radius:23px;
+    background:
+        radial-gradient(
+            circle at center,
+            rgba(22,131,255,.14),
+            transparent 60%
+        ),
+        rgba(255,255,255,.025);
+}
+
+.cta-box h2{
+    margin-bottom:10px;
+    font-size:30px;
+}
+
+.cta-box p{
+    margin-bottom:25px;
+    color:var(--muted);
+    font-size:13px;
+}
+
+/* ================= FOOTER ================= */
+
+footer{
+    padding:28px 6%;
+    border-top:1px solid var(--border);
+    background:rgba(0,0,0,.2);
+}
+
+.footer-inner{
+    max-width:1180px;
+    margin:auto;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:20px;
+}
+
+.footer-brand{
+    font-size:14px;
+    font-weight:800;
+}
+
+.footer-text{
+    margin-top:4px;
+    color:#657287;
+    font-size:11px;
+}
+
+.footer-links{
+    display:flex;
+    gap:18px;
+}
+
+.footer-links a{
+    color:#738198;
+    text-decoration:none;
+    font-size:11px;
+}
+
+.footer-links a:hover{
+    color:white;
+}
+
+/* ================= MOBILE ================= */
+
+@media(max-width:850px){
+
+    .navbar{
+        padding:0 5%;
+    }
+
+    .nav-links{
+        position:absolute;
+        top:76px;
+        left:0;
+        width:100%;
+        display:none;
+        flex-direction:column;
+        align-items:stretch;
+        gap:5px;
+        padding:20px 5%;
+        background:rgba(3,7,18,.97);
+        border-bottom:1px solid var(--border);
+    }
+
+    .nav-links.active{
+        display:flex;
+    }
+
+    .nav-links a{
+        padding:13px;
+        border-radius:9px;
+    }
+
+    .nav-links a:hover{
+        background:rgba(255,255,255,.04);
+    }
+
+    .menu-btn{
+        display:block;
+    }
+
+    .hero{
+        padding-top:80px;
+    }
+
+    .hero h1{
+        letter-spacing:-2px;
+    }
+
+    .features{
+        grid-template-columns:1fr;
+    }
+
+    .footer-inner{
+        flex-direction:column;
+        text-align:center;
+    }
+}
+
+@media(max-width:450px){
+
+    .brand img{
+        width:40px;
+        height:40px;
+    }
+
+    .brand-name{
+        font-size:17px;
+    }
+
+    .brand-sub{
+        font-size:9px;
+    }
+
+    .hero{
+        padding-left:5%;
+        padding-right:5%;
+    }
+
+    .hero p{
+        font-size:14px;
+    }
+
+    .hero-buttons{
+        flex-direction:column;
+    }
+
+    .btn{
+        width:100%;
+    }
+
+    .cta-box{
+        padding:32px 20px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<!-- ================= NAVBAR ================= -->
+
+<nav class="navbar">
+
+    <a href="index.html" class="brand">
+
+        <img
+            src="https://i.ibb.co/qMHWZRf3/photo-6113671142116627052-y.jpg"
+            alt="MTLS Logo"
+        >
+
+        <div class="brand-text">
+
+            <div class="brand-name">
+                MTLS
+            </div>
+
+            <div class="brand-sub">
+                Malaysia Trusted List Seller
+            </div>
+
+        </div>
+
+    </a>
+
+
+    <button
+        class="menu-btn"
+        onclick="toggleMenu()"
+        aria-label="Open menu"
+    >
+        ☰
+    </button>
+
+
+    <div class="nav-links" id="navLinks">
+
+        <a href="index.html">
+            Home
+        </a>
+
+        <a href="#trusted">
+            Trusted List
+        </a>
+
+        <a href="#about">
+            About
+        </a>
+
+        <a href="admin.html" class="nav-admin">
+            Admin Panel
+        </a>
+
+    </div>
+
+</nav>
+
+
+<!-- ================= HERO ================= -->
+
+<section class="hero">
+
+    <div class="badge">
+
+        <span class="badge-dot"></span>
+
+        VERIFIED TRUST NETWORK
+
+    </div>
+
+
+    <h1>
+
+        Malaysia's
+        <span>Trusted List</span>
+
+    </h1>
+
+
+    <p>
+
+        A trusted directory for verified members
+        in Malaysia. Check profiles, reviews and
+        trust status before dealing.
+
+    </p>
+
+
+    <div class="hero-buttons">
+
+        <a
+            href="#trusted"
+            class="btn btn-primary"
+        >
+            VIEW TRUSTED LIST
+        </a>
+
+
+        <a
+            href="admin.html"
+            class="btn btn-secondary"
+        >
+            ADMIN PANEL
+        </a>
+
+    </div>
+
+</section>
+
+
+<!-- ================= TRUSTED LIST ================= -->
+
+<section
+    class="section"
+    id="trusted"
+>
+
+    <div class="section-header">
+
+        <div class="section-title">
+            Trusted List
+        </div>
+
+        <div class="section-desc">
+            Browse members verified by MTLS.
+        </div>
+
+    </div>
+
+
+    <!-- SEARCH -->
+
+    <div class="search-wrap">
+
+        <input
+            type="text"
+            id="searchInput"
+            class="search"
+            placeholder="Search member..."
+            autocomplete="off"
+        >
+
+    </div>
+
+
+    <!-- EMPTY UNTIL REAL MEMBERS ARE ADDED -->
+
+    <div
+        class="empty"
+        id="emptyState"
+    >
+
+        <div class="empty-icon">
+            ✓
+        </div>
+
+        <h3>
+            No trusted members yet
+        </h3>
+
+        <p>
+            The MTLS trusted list is currently empty.
+            Verified members will appear here once they
+            are added through the admin dashboard.
+        </p>
+
+    </div>
+
+</section>
+
+
+<!-- ================= ABOUT ================= -->
+
+<section
+    class="section"
+    id="about"
+>
+
+    <div class="section-header">
+
+        <div class="section-title">
+            Why MTLS?
+        </div>
+
+        <div class="section-desc">
+            Built to make online dealing safer and more transparent.
+        </div>
+
+    </div>
+
+
+    <div class="features">
+
+
+        <div class="feature">
+
+            <div class="feature-icon">
+                ✓
+            </div>
+
+            <h3>
+                Verified Members
+            </h3>
+
+            <p>
+                Member profiles can be verified by
+                MTLS administrators before receiving
+                the verified badge.
+            </p>
+
+        </div>
+
+
+        <div class="feature">
+
+            <div class="feature-icon">
+                ★
+            </div>
+
+            <h3>
+                Reviews
+            </h3>
+
+            <p>
+                Customers can leave ratings and reviews
+                to help others understand a member's
+                reputation.
+            </p>
+
+        </div>
+
+
+        <div class="feature">
+
+            <div class="feature-icon">
+                🔒
+            </div>
+
+            <h3>
+                Trust Status
+            </h3>
+
+            <p>
+                Each profile can display its current
+                trust status so users can check before
+                making a deal.
+            </p>
+
+        </div>
+
+
+    </div>
+
+</section>
+
+
+<!-- ================= CTA ================= -->
+
+<section class="cta">
+
+    <div class="cta-box">
+
+        <h2>
+            Check Before You Deal.
+        </h2>
+
+        <p>
+            Search the MTLS directory and verify a member
+            before starting your transaction.
+        </p>
+
+
+        <a
+            href="#trusted"
+            class="btn btn-primary"
+        >
+            SEARCH TRUSTED LIST
+        </a>
+
+    </div>
+
+</section>
+
+
+<!-- ================= FOOTER ================= -->
+
+<footer>
+
+    <div class="footer-inner">
+
+        <div>
+
+            <div class="footer-brand">
+                MTLS — Malaysia Trusted List Seller
+            </div>
+
+            <div class="footer-text">
+                Trusted network directory.
+            </div>
+
+        </div>
+
+
+        <div class="footer-links">
+
+            <a href="index.html">
+                Home
+            </a>
+
+            <a href="#trusted">
+                Trusted List
+            </a>
+
+            <a href="admin.html">
+                Admin
+            </a>
+
+        </div>
+
+    </div>
+
+</footer>
+
+
+<script>
+
+/* ================= MOBILE MENU ================= */
+
+function toggleMenu(){
+
+    const nav =
+        document.getElementById("navLinks");
+
+    nav.classList.toggle("active");
+
+}
+
+
+/* CLOSE MENU AFTER CLICK */
+
+document
+    .querySelectorAll(".nav-links a")
+    .forEach(link => {
+
+        link.addEventListener(
+            "click",
+            () => {
+
+                document
+                    .getElementById("navLinks")
+                    .classList.remove("active");
+
+            }
+        );
+
+    });
+
+
+/* ================= SEARCH ================= */
+
+/*
+   Real members will be loaded from Supabase later.
+   Search logic will be connected once the member
+   cards are generated dynamically.
+*/
+
+const searchInput =
+    document.getElementById("searchInput");
+
+searchInput.addEventListener(
+    "input",
+    function(){
+
+        // Reserved for Supabase member search.
+
+    }
+);
+
+</script>
+
+</body>
+</html>
