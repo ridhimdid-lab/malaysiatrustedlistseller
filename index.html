@@ -26,6 +26,7 @@
     --border:rgba(255,255,255,.08);
     --green:#21d98b;
     --red:#ff5364;
+    --gold:#ffc857;
 }
 
 html{
@@ -41,7 +42,7 @@ body{
         var(--bg);
 }
 
-/* ================= NAVBAR ================= */
+/* NAVBAR */
 
 .navbar{
     position:sticky;
@@ -127,7 +128,7 @@ body{
     cursor:pointer;
 }
 
-/* ================= HERO ================= */
+/* HERO */
 
 .hero{
     max-width:1180px;
@@ -218,7 +219,7 @@ body{
     background:rgba(22,131,255,.07);
 }
 
-/* ================= SECTION ================= */
+/* SECTION */
 
 .section{
     max-width:1180px;
@@ -241,7 +242,181 @@ body{
     font-size:13px;
 }
 
-/* ================= SEARCH ================= */
+/* FEATURED */
+
+.featured-section{
+    max-width:1180px;
+    margin:0 auto;
+    padding:15px 6% 55px;
+}
+
+.featured-header{
+    display:flex;
+    align-items:center;
+    gap:12px;
+    margin-bottom:22px;
+}
+
+.featured-line{
+    width:4px;
+    height:42px;
+    border-radius:10px;
+    background:linear-gradient(
+        to bottom,
+        #ffc857,
+        #ff9f1c
+    );
+    box-shadow:0 0 18px rgba(255,200,87,.25);
+}
+
+.featured-label{
+    color:#ffc857;
+    font-size:10px;
+    font-weight:900;
+    letter-spacing:2px;
+}
+
+.featured-title{
+    margin-top:3px;
+    font-size:27px;
+    font-weight:900;
+}
+
+.featured-desc{
+    margin-top:5px;
+    color:var(--muted);
+    font-size:12px;
+}
+
+.featured-grid{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:17px;
+}
+
+/* FEATURED CARD */
+
+.featured-card{
+    position:relative;
+    padding:25px;
+    border:1px solid rgba(255,200,87,.20);
+    border-radius:19px;
+    background:
+        radial-gradient(
+            circle at top right,
+            rgba(255,200,87,.09),
+            transparent 35%
+        ),
+        linear-gradient(
+            145deg,
+            rgba(22,131,255,.07),
+            rgba(255,255,255,.018)
+        );
+    transition:.25s;
+    overflow:hidden;
+}
+
+.featured-card:hover{
+    transform:translateY(-4px);
+    border-color:rgba(255,200,87,.38);
+    box-shadow:0 18px 50px rgba(0,0,0,.28);
+}
+
+.featured-star{
+    position:absolute;
+    top:16px;
+    right:17px;
+    font-size:18px;
+    color:#ffc857;
+    filter:drop-shadow(0 0 8px rgba(255,200,87,.3));
+}
+
+.featured-role{
+    display:inline-block;
+    margin-bottom:13px;
+    padding:5px 8px;
+    border-radius:7px;
+    color:#ffc857;
+    background:rgba(255,200,87,.08);
+    border:1px solid rgba(255,200,87,.16);
+    font-size:9px;
+    font-weight:900;
+}
+
+.featured-name{
+    padding-right:30px;
+    font-size:20px;
+    font-weight:900;
+}
+
+.featured-username{
+    margin-top:5px;
+    color:#718198;
+    font-size:11px;
+}
+
+.featured-verified{
+    display:inline-flex;
+    margin-top:10px;
+    padding:5px 9px;
+    border-radius:7px;
+    color:#62b0ff;
+    background:rgba(22,131,255,.09);
+    border:1px solid rgba(22,131,255,.20);
+    font-size:10px;
+    font-weight:800;
+}
+
+.featured-description{
+    margin-top:17px;
+    min-height:38px;
+    color:#8997aa;
+    font-size:12px;
+    line-height:1.6;
+}
+
+.featured-status{
+    display:flex;
+    align-items:center;
+    gap:7px;
+    margin-top:17px;
+    color:var(--green);
+    font-size:11px;
+    font-weight:800;
+}
+
+.featured-status-dot{
+    width:7px;
+    height:7px;
+    border-radius:50%;
+    background:var(--green);
+    box-shadow:0 0 10px rgba(33,217,139,.55);
+}
+
+.featured-actions{
+    display:flex;
+    margin-top:19px;
+}
+
+.featured-btn{
+    width:100%;
+    padding:11px;
+    border-radius:10px;
+    text-align:center;
+    text-decoration:none;
+    color:#70b5ff;
+    background:rgba(22,131,255,.07);
+    border:1px solid rgba(22,131,255,.18);
+    font-size:11px;
+    font-weight:800;
+    transition:.2s;
+}
+
+.featured-btn:hover{
+    background:rgba(22,131,255,.13);
+}
+
+/* SEARCH */
 
 .search-wrap{
     margin-bottom:25px;
@@ -268,7 +443,7 @@ body{
     box-shadow:0 0 0 4px rgba(22,131,255,.07);
 }
 
-/* ================= MEMBER GRID ================= */
+/* MEMBER GRID */
 
 .member-grid{
     display:grid;
@@ -276,7 +451,7 @@ body{
     gap:17px;
 }
 
-/* ================= MEMBER CARD ================= */
+/* MEMBER CARD */
 
 .member-card{
     position:relative;
@@ -376,14 +551,6 @@ body{
     box-shadow:0 0 10px rgba(33,217,139,.55);
 }
 
-.suspended{
-    color:var(--red);
-}
-
-.suspended .status-dot{
-    background:var(--red);
-}
-
 .member-actions{
     display:flex;
     gap:9px;
@@ -421,7 +588,7 @@ body{
     background:rgba(22,131,255,.13);
 }
 
-/* ================= LOADING ================= */
+/* LOADING */
 
 .loading{
     padding:60px 20px;
@@ -446,7 +613,7 @@ body{
     }
 }
 
-/* ================= EMPTY ================= */
+/* EMPTY */
 
 .empty{
     padding:65px 25px;
@@ -483,7 +650,7 @@ body{
     line-height:1.6;
 }
 
-/* ================= ABOUT ================= */
+/* ABOUT */
 
 .features{
     display:grid;
@@ -524,7 +691,7 @@ body{
     line-height:1.6;
 }
 
-/* ================= CTA ================= */
+/* CTA */
 
 .cta{
     max-width:1050px;
@@ -557,7 +724,7 @@ body{
     font-size:13px;
 }
 
-/* ================= FOOTER ================= */
+/* FOOTER */
 
 footer{
     padding:28px 6%;
@@ -600,7 +767,7 @@ footer{
     color:white;
 }
 
-/* ================= MOBILE ================= */
+/* MOBILE */
 
 @media(max-width:850px){
 
@@ -647,6 +814,10 @@ footer{
         letter-spacing:-2px;
     }
 
+    .featured-grid{
+        grid-template-columns:1fr 1fr;
+    }
+
     .member-grid{
         grid-template-columns:1fr 1fr;
     }
@@ -663,6 +834,7 @@ footer{
 
 @media(max-width:550px){
 
+    .featured-grid,
     .member-grid{
         grid-template-columns:1fr;
     }
@@ -709,8 +881,6 @@ footer{
 
 <body>
 
-<!-- ================= NAVBAR ================= -->
-
 <nav class="navbar">
 
     <a href="index.html" class="brand">
@@ -722,9 +892,7 @@ footer{
 
         <div class="brand-text">
 
-            <div class="brand-name">
-                MTLS
-            </div>
+            <div class="brand-name">MTLS</div>
 
             <div class="brand-sub">
                 Malaysia Trusted List Seller
@@ -744,17 +912,13 @@ footer{
 
     <div class="nav-links" id="navLinks">
 
-        <a href="index.html">
-            Home
-        </a>
+        <a href="index.html">Home</a>
 
-        <a href="#trusted">
-            Trusted List
-        </a>
+        <a href="#featured">Featured</a>
 
-        <a href="#about">
-            About
-        </a>
+        <a href="#trusted">Trusted List</a>
+
+        <a href="#about">About</a>
 
         <a href="admin.html" class="nav-admin">
             Admin Panel
@@ -764,8 +928,6 @@ footer{
 
 </nav>
 
-
-<!-- ================= HERO ================= -->
 
 <section class="hero">
 
@@ -778,33 +940,23 @@ footer{
     </div>
 
     <h1>
-
         Malaysia's
-        <span>Trusted List SELLER </span>
-
+        <span>Trusted List SELLER</span>
     </h1>
 
     <p>
-
         A trusted directory for verified members
         in Malaysia. Check profiles, reviews and
         trust status before dealing.
-
     </p>
 
     <div class="hero-buttons">
-       
-        <a
-            href="#trusted"
-            class="btn btn-primary"
-        >
+
+        <a href="#trusted" class="btn btn-primary">
             VIEW TRUSTED LIST
         </a>
 
-        <a
-            href="admin.html"
-            class="btn btn-secondary"
-        >
+        <a href="admin.html" class="btn btn-secondary">
             ADMIN PANEL
         </a>
 
@@ -813,7 +965,45 @@ footer{
 </section>
 
 
-<!-- ================= TRUSTED LIST ================= -->
+<!-- FEATURED -->
+
+<section
+    class="featured-section"
+    id="featured"
+>
+
+    <div class="featured-header">
+
+        <div class="featured-line"></div>
+
+        <div>
+
+            <div class="featured-label">
+                MTLS FEATURED
+            </div>
+
+            <div class="featured-title">
+                Featured Profiles
+            </div>
+
+            <div class="featured-desc">
+                Official MTLS profiles selected for Featured placement.
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <div
+        class="featured-grid"
+        id="featuredGrid"
+    ></div>
+
+</section>
+
+
+<!-- TRUSTED LIST -->
 
 <section
     class="section"
@@ -844,7 +1034,6 @@ footer{
 
     </div>
 
-    <!-- LOADING -->
 
     <div
         class="loading"
@@ -857,7 +1046,6 @@ footer{
 
     </div>
 
-    <!-- MEMBER GRID -->
 
     <div
         class="member-grid"
@@ -865,7 +1053,6 @@ footer{
         style="display:none;"
     ></div>
 
-    <!-- EMPTY -->
 
     <div
         class="empty"
@@ -883,8 +1070,6 @@ footer{
 
         <p id="emptyText">
             The MTLS trusted list is currently empty.
-            Verified members will appear here once they
-            are added through the admin dashboard.
         </p>
 
     </div>
@@ -892,7 +1077,7 @@ footer{
 </section>
 
 
-<!-- ================= ABOUT ================= -->
+<!-- ABOUT -->
 
 <section
     class="section"
@@ -915,13 +1100,9 @@ footer{
 
         <div class="feature">
 
-            <div class="feature-icon">
-                ✓
-            </div>
+            <div class="feature-icon">✓</div>
 
-            <h3>
-                Verified Members
-            </h3>
+            <h3>Verified Members</h3>
 
             <p>
                 Member profiles can be verified by
@@ -931,15 +1112,12 @@ footer{
 
         </div>
 
+
         <div class="feature">
 
-            <div class="feature-icon">
-                ★
-            </div>
+            <div class="feature-icon">★</div>
 
-            <h3>
-                Reviews
-            </h3>
+            <h3>Reviews</h3>
 
             <p>
                 Customers can leave ratings and reviews
@@ -949,15 +1127,12 @@ footer{
 
         </div>
 
+
         <div class="feature">
 
-            <div class="feature-icon">
-                🔒
-            </div>
+            <div class="feature-icon">🔒</div>
 
-            <h3>
-                Trust Status
-            </h3>
+            <h3>Trust Status</h3>
 
             <p>
                 Each profile can display its current
@@ -971,8 +1146,6 @@ footer{
 
 </section>
 
-
-<!-- ================= CTA ================= -->
 
 <section class="cta">
 
@@ -999,8 +1172,6 @@ footer{
 </section>
 
 
-<!-- ================= FOOTER ================= -->
-
 <footer>
 
     <div class="footer-inner">
@@ -1019,17 +1190,13 @@ footer{
 
         <div class="footer-links">
 
-            <a href="index.html">
-                Home
-            </a>
+            <a href="index.html">Home</a>
 
-            <a href="#trusted">
-                Trusted List
-            </a>
+            <a href="#featured">Featured</a>
 
-            <a href="admin.html">
-                Admin
-            </a>
+            <a href="#trusted">Trusted List</a>
+
+            <a href="admin.html">Admin</a>
 
         </div>
 
@@ -1040,7 +1207,7 @@ footer{
 
 <script>
 
-/* ================= SUPABASE ================= */
+/* SUPABASE */
 
 const SUPABASE_URL =
     "https://tmvqcmiyjknefaafitav.supabase.co";
@@ -1055,10 +1222,13 @@ const supabaseClient =
     );
 
 
-/* ================= ELEMENTS ================= */
+/* ELEMENTS */
 
 const memberGrid =
     document.getElementById("memberGrid");
+
+const featuredGrid =
+    document.getElementById("featuredGrid");
 
 const loadingState =
     document.getElementById("loadingState");
@@ -1075,11 +1245,173 @@ const emptyText =
 const searchInput =
     document.getElementById("searchInput");
 
-
 let allMembers = [];
 
 
-/* ================= LOAD MEMBERS ================= */
+/* FEATURED */
+
+async function loadFeatured(){
+
+    const {
+        data,
+        error
+    } =
+        await supabaseClient
+            .from("profiles")
+            .select(`
+                id,
+                username,
+                display_name,
+                role,
+                description,
+                verified,
+                status,
+                featured
+            `)
+            .eq("status","TRUSTED")
+            .eq("featured",true)
+            .in("role",[
+                "OWNER",
+                "ADMIN",
+                "PARTNER"
+            ]);
+
+
+    if(error){
+
+        console.error(
+            "Featured error:",
+            error
+        );
+
+        featuredGrid.innerHTML = "";
+
+        return;
+    }
+
+
+    const rolePriority = {
+        OWNER:1,
+        ADMIN:2,
+        PARTNER:3
+    };
+
+
+    const featured =
+        (data || []).sort((a,b) => {
+
+            const roleA =
+                rolePriority[
+                    String(a.role || "").toUpperCase()
+                ] || 99;
+
+            const roleB =
+                rolePriority[
+                    String(b.role || "").toUpperCase()
+                ] || 99;
+
+            return roleA - roleB;
+
+        });
+
+
+    if(!featured.length){
+
+        featuredGrid.innerHTML = `
+            <div style="
+                grid-column:1/-1;
+                padding:30px;
+                text-align:center;
+                color:#718198;
+                border:1px dashed rgba(255,255,255,.08);
+                border-radius:16px;
+                font-size:12px;
+            ">
+                No Featured Profiles at the moment.
+            </div>
+        `;
+
+        return;
+    }
+
+
+    featuredGrid.innerHTML =
+        featured.map(member => {
+
+            const verifiedBadge =
+                member.verified
+                ? `
+                    <div class="featured-verified">
+                        ✓ VERIFIED BY MTLS
+                    </div>
+                `
+                : "";
+
+
+            return `
+
+                <div class="featured-card">
+
+                    <div class="featured-star">
+                        ★
+                    </div>
+
+                    <div class="featured-role">
+                        ${escapeHTML(member.role)}
+                    </div>
+
+                    <div class="featured-name">
+                        ${escapeHTML(
+                            member.display_name ||
+                            member.username ||
+                            "Unnamed"
+                        )}
+                    </div>
+
+                    <div class="featured-username">
+                        @${escapeHTML(
+                            member.username || "-"
+                        )}
+                    </div>
+
+                    ${verifiedBadge}
+
+                    <div class="featured-description">
+                        ${escapeHTML(
+                            member.description ||
+                            "MTLS listed member."
+                        )}
+                    </div>
+
+                    <div class="featured-status">
+
+                        <span class="featured-status-dot"></span>
+
+                        TRUSTED
+
+                    </div>
+
+                    <div class="featured-actions">
+
+                        <a
+                            class="featured-btn"
+                            href="profile.html?id=${encodeURIComponent(member.id)}"
+                        >
+                            View Profile
+                        </a>
+
+                    </div>
+
+                </div>
+
+            `;
+
+        }).join("");
+
+}
+
+
+/* MEMBERS */
 
 async function loadMembers(){
 
@@ -1087,26 +1419,29 @@ async function loadMembers(){
     memberGrid.style.display = "none";
     emptyState.style.display = "none";
 
+
     const {
         data,
         error
-    } = await supabaseClient
-        .from("profiles")
-        .select(`
-            id,
-            username,
-            display_name,
-            role,
-            whatsapp,
-            description,
-            verified,
-            status,
-            created_at
-        `)
-        .eq("status", "TRUSTED")
-        .order("created_at", {
-            ascending:false
-        });
+    } =
+        await supabaseClient
+            .from("profiles")
+            .select(`
+                id,
+                username,
+                display_name,
+                role,
+                whatsapp,
+                description,
+                verified,
+                status,
+                created_at
+            `)
+            .eq("status","TRUSTED")
+            .order("created_at",{
+                ascending:false
+            });
+
 
     if(error){
 
@@ -1128,6 +1463,7 @@ async function loadMembers(){
         return;
     }
 
+
     allMembers = data || [];
 
     loadingState.style.display = "none";
@@ -1137,11 +1473,12 @@ async function loadMembers(){
 }
 
 
-/* ================= RENDER MEMBERS ================= */
+/* RENDER MEMBERS */
 
 function renderMembers(members){
 
     memberGrid.innerHTML = "";
+
 
     if(!members.length){
 
@@ -1149,21 +1486,21 @@ function renderMembers(members){
 
         emptyTitle.textContent =
             searchInput.value.trim()
-                ? "No members found"
-                : "No trusted members yet";
+            ? "No members found"
+            : "No trusted members yet";
 
         emptyText.textContent =
             searchInput.value.trim()
-                ? "Try searching with another username or display name."
-                : "The MTLS trusted list is currently empty. Verified members will appear here once they are added through the admin dashboard.";
+            ? "Try searching with another username or display name."
+            : "The MTLS trusted list is currently empty.";
 
         emptyState.style.display = "block";
 
         return;
     }
 
-    emptyState.style.display = "none";
 
+    emptyState.style.display = "none";
     memberGrid.style.display = "grid";
 
 
@@ -1178,40 +1515,38 @@ function renderMembers(members){
 
         const verifiedBadge =
             member.verified
-                ? `
-                    <div class="verified">
-                        ✓ VERIFIED BY MTLS
-                    </div>
-                `
-                : "";
+            ? `
+                <div class="verified">
+                    ✓ VERIFIED BY MTLS
+                </div>
+            `
+            : "";
 
 
         const whatsapp =
-            cleanWhatsApp(
-                member.whatsapp
-            );
+            cleanWhatsApp(member.whatsapp);
 
 
         const whatsappButton =
             whatsapp
-                ? `
-                    <a
-                        class="member-btn whatsapp-btn"
-                        href="https://wa.me/${whatsapp}"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                    >
-                        WhatsApp
-                    </a>
-                `
-                : `
-                    <span
-                        class="member-btn whatsapp-btn"
-                        style="opacity:.4;cursor:not-allowed;"
-                    >
-                        No WhatsApp
-                    </span>
-                `;
+            ? `
+                <a
+                    class="member-btn whatsapp-btn"
+                    href="https://wa.me/${whatsapp}"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                >
+                    WhatsApp
+                </a>
+            `
+            : `
+                <span
+                    class="member-btn whatsapp-btn"
+                    style="opacity:.4;cursor:not-allowed;"
+                >
+                    No WhatsApp
+                </span>
+            `;
 
 
         card.innerHTML = `
@@ -1289,7 +1624,7 @@ function renderMembers(members){
 }
 
 
-/* ================= SEARCH ================= */
+/* SEARCH */
 
 searchInput.addEventListener(
     "input",
@@ -1343,7 +1678,7 @@ searchInput.addEventListener(
 );
 
 
-/* ================= WHATSAPP ================= */
+/* WHATSAPP */
 
 function cleanWhatsApp(number){
 
@@ -1356,19 +1691,7 @@ function cleanWhatsApp(number){
             .replace(/\D/g,"");
 
 
-    /*
-       Malaysia numbers:
-
-       0123456789
-       -> 60123456789
-
-       60123456789
-       -> stays the same
-    */
-
-    if(
-        value.startsWith("0")
-    ){
+    if(value.startsWith("0")){
 
         value =
             "60" +
@@ -1381,11 +1704,11 @@ function cleanWhatsApp(number){
 }
 
 
-/* ================= HTML SECURITY ================= */
+/* SECURITY */
 
 function escapeHTML(value){
 
-    return String(value)
+    return String(value ?? "")
         .replace(/&/g,"&amp;")
         .replace(/</g,"&lt;")
         .replace(/>/g,"&gt;")
@@ -1395,18 +1718,13 @@ function escapeHTML(value){
 }
 
 
-/* ================= MOBILE MENU ================= */
+/* MENU */
 
 function toggleMenu(){
 
-    const nav =
-        document.getElementById(
-            "navLinks"
-        );
-
-    nav.classList.toggle(
-        "active"
-    );
+    document
+        .getElementById("navLinks")
+        .classList.toggle("active");
 
 }
 
@@ -1420,12 +1738,8 @@ document
             () => {
 
                 document
-                    .getElementById(
-                        "navLinks"
-                    )
-                    .classList.remove(
-                        "active"
-                    );
+                    .getElementById("navLinks")
+                    .classList.remove("active");
 
             }
         );
@@ -1433,9 +1747,12 @@ document
     });
 
 
-/* ================= START ================= */
+/* START */
 
-loadMembers();
+Promise.all([
+    loadFeatured(),
+    loadMembers()
+]);
 
 </script>
 
