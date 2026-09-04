@@ -6,6 +6,8 @@
 
 <title>MTLS — Malaysia Trusted List Seller</title>
 
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
 <style>
 *{
     margin:0;
@@ -23,6 +25,7 @@
     --muted:#8d9bb0;
     --border:rgba(255,255,255,.08);
     --green:#21d98b;
+    --red:#ff5364;
 }
 
 html{
@@ -33,16 +36,8 @@ body{
     min-height:100vh;
     color:var(--text);
     background:
-        radial-gradient(
-            circle at 20% 0%,
-            rgba(0,102,255,.16),
-            transparent 30%
-        ),
-        radial-gradient(
-            circle at 90% 20%,
-            rgba(0,153,255,.10),
-            transparent 25%
-        ),
+        radial-gradient(circle at 20% 0%,rgba(0,102,255,.16),transparent 30%),
+        radial-gradient(circle at 90% 20%,rgba(0,153,255,.10),transparent 25%),
         var(--bg);
 }
 
@@ -203,11 +198,7 @@ body{
 
 .btn-primary{
     color:white;
-    background:linear-gradient(
-        135deg,
-        #1683ff,
-        #005ce6
-    );
+    background:linear-gradient(135deg,#1683ff,#005ce6);
     box-shadow:0 10px 35px rgba(0,102,255,.22);
 }
 
@@ -227,7 +218,7 @@ body{
     background:rgba(22,131,255,.07);
 }
 
-/* ================= TRUSTED LIST ================= */
+/* ================= SECTION ================= */
 
 .section{
     max-width:1180px;
@@ -274,11 +265,188 @@ body{
 
 .search:focus{
     border-color:rgba(22,131,255,.55);
-    box-shadow:
-        0 0 0 4px rgba(22,131,255,.07);
+    box-shadow:0 0 0 4px rgba(22,131,255,.07);
 }
 
-/* ================= EMPTY STATE ================= */
+/* ================= MEMBER GRID ================= */
+
+.member-grid{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:17px;
+}
+
+/* ================= MEMBER CARD ================= */
+
+.member-card{
+    position:relative;
+    padding:24px;
+    border:1px solid var(--border);
+    border-radius:18px;
+    background:
+        linear-gradient(
+            145deg,
+            rgba(22,131,255,.055),
+            rgba(255,255,255,.018)
+        );
+    transition:.25s;
+    overflow:hidden;
+}
+
+.member-card:hover{
+    transform:translateY(-4px);
+    border-color:rgba(22,131,255,.32);
+    box-shadow:0 15px 45px rgba(0,0,0,.25);
+}
+
+.member-top{
+    display:flex;
+    justify-content:space-between;
+    align-items:flex-start;
+    gap:15px;
+}
+
+.member-name{
+    font-size:19px;
+    font-weight:900;
+    color:white;
+    word-break:break-word;
+}
+
+.member-username{
+    margin-top:5px;
+    color:#6f8199;
+    font-size:11px;
+}
+
+.verified{
+    display:inline-flex;
+    align-items:center;
+    gap:5px;
+    margin-top:10px;
+    padding:5px 9px;
+    border-radius:7px;
+    color:#62b0ff;
+    background:rgba(22,131,255,.09);
+    border:1px solid rgba(22,131,255,.20);
+    font-size:10px;
+    font-weight:800;
+}
+
+.role{
+    padding:6px 9px;
+    border-radius:8px;
+    background:rgba(255,255,255,.05);
+    border:1px solid var(--border);
+    color:#aebbd0;
+    font-size:9px;
+    font-weight:800;
+    white-space:nowrap;
+}
+
+.member-desc{
+    margin-top:18px;
+    min-height:38px;
+    color:#8997aa;
+    font-size:12px;
+    line-height:1.6;
+}
+
+.member-status{
+    display:flex;
+    align-items:center;
+    gap:7px;
+    margin-top:18px;
+    font-size:11px;
+    font-weight:800;
+}
+
+.status-dot{
+    width:7px;
+    height:7px;
+    border-radius:50%;
+}
+
+.trusted{
+    color:var(--green);
+}
+
+.trusted .status-dot{
+    background:var(--green);
+    box-shadow:0 0 10px rgba(33,217,139,.55);
+}
+
+.suspended{
+    color:var(--red);
+}
+
+.suspended .status-dot{
+    background:var(--red);
+}
+
+.member-actions{
+    display:flex;
+    gap:9px;
+    margin-top:20px;
+}
+
+.member-btn{
+    flex:1;
+    padding:11px 10px;
+    border-radius:10px;
+    text-align:center;
+    text-decoration:none;
+    font-size:11px;
+    font-weight:800;
+    transition:.2s;
+}
+
+.whatsapp-btn{
+    color:#65e3ad;
+    background:rgba(33,217,139,.07);
+    border:1px solid rgba(33,217,139,.18);
+}
+
+.whatsapp-btn:hover{
+    background:rgba(33,217,139,.12);
+}
+
+.profile-btn{
+    color:#70b5ff;
+    background:rgba(22,131,255,.07);
+    border:1px solid rgba(22,131,255,.18);
+}
+
+.profile-btn:hover{
+    background:rgba(22,131,255,.13);
+}
+
+/* ================= LOADING ================= */
+
+.loading{
+    padding:60px 20px;
+    text-align:center;
+    color:var(--muted);
+    font-size:13px;
+}
+
+.loader{
+    width:28px;
+    height:28px;
+    margin:0 auto 15px;
+    border:3px solid rgba(255,255,255,.08);
+    border-top-color:var(--blue);
+    border-radius:50%;
+    animation:spin .8s linear infinite;
+}
+
+@keyframes spin{
+    to{
+        transform:rotate(360deg);
+    }
+}
+
+/* ================= EMPTY ================= */
 
 .empty{
     padding:65px 25px;
@@ -479,6 +647,10 @@ footer{
         letter-spacing:-2px;
     }
 
+    .member-grid{
+        grid-template-columns:1fr 1fr;
+    }
+
     .features{
         grid-template-columns:1fr;
     }
@@ -486,6 +658,13 @@ footer{
     .footer-inner{
         flex-direction:column;
         text-align:center;
+    }
+}
+
+@media(max-width:550px){
+
+    .member-grid{
+        grid-template-columns:1fr;
     }
 }
 
@@ -555,7 +734,6 @@ footer{
 
     </a>
 
-
     <button
         class="menu-btn"
         onclick="toggleMenu()"
@@ -563,7 +741,6 @@ footer{
     >
         ☰
     </button>
-
 
     <div class="nav-links" id="navLinks">
 
@@ -600,14 +777,12 @@ footer{
 
     </div>
 
-
     <h1>
 
         Malaysia's
         <span>Trusted List</span>
 
     </h1>
-
 
     <p>
 
@@ -617,7 +792,6 @@ footer{
 
     </p>
 
-
     <div class="hero-buttons">
 
         <a
@@ -626,7 +800,6 @@ footer{
         >
             VIEW TRUSTED LIST
         </a>
-
 
         <a
             href="admin.html"
@@ -659,9 +832,6 @@ footer{
 
     </div>
 
-
-    <!-- SEARCH -->
-
     <div class="search-wrap">
 
         <input
@@ -674,23 +844,44 @@ footer{
 
     </div>
 
+    <!-- LOADING -->
 
-    <!-- EMPTY UNTIL REAL MEMBERS ARE ADDED -->
+    <div
+        class="loading"
+        id="loadingState"
+    >
+
+        <div class="loader"></div>
+
+        Loading trusted members...
+
+    </div>
+
+    <!-- MEMBER GRID -->
+
+    <div
+        class="member-grid"
+        id="memberGrid"
+        style="display:none;"
+    ></div>
+
+    <!-- EMPTY -->
 
     <div
         class="empty"
         id="emptyState"
+        style="display:none;"
     >
 
         <div class="empty-icon">
             ✓
         </div>
 
-        <h3>
+        <h3 id="emptyTitle">
             No trusted members yet
         </h3>
 
-        <p>
+        <p id="emptyText">
             The MTLS trusted list is currently empty.
             Verified members will appear here once they
             are added through the admin dashboard.
@@ -720,9 +911,7 @@ footer{
 
     </div>
 
-
     <div class="features">
-
 
         <div class="feature">
 
@@ -742,7 +931,6 @@ footer{
 
         </div>
 
-
         <div class="feature">
 
             <div class="feature-icon">
@@ -761,7 +949,6 @@ footer{
 
         </div>
 
-
         <div class="feature">
 
             <div class="feature-icon">
@@ -779,7 +966,6 @@ footer{
             </p>
 
         </div>
-
 
     </div>
 
@@ -800,7 +986,6 @@ footer{
             Search the MTLS directory and verify a member
             before starting your transaction.
         </p>
-
 
         <a
             href="#trusted"
@@ -832,7 +1017,6 @@ footer{
 
         </div>
 
-
         <div class="footer-links">
 
             <a href="index.html">
@@ -856,19 +1040,376 @@ footer{
 
 <script>
 
+/* ================= SUPABASE ================= */
+
+const SUPABASE_URL =
+    "https://tmvqcmiyjknefaafitav.supabase.co";
+
+const SUPABASE_ANON_KEY =
+    "sb_publishable_bUrV_nUC6hioAg8RW6XbEA_U436y-0S";
+
+const supabaseClient =
+    window.supabase.createClient(
+        SUPABASE_URL,
+        SUPABASE_ANON_KEY
+    );
+
+
+/* ================= ELEMENTS ================= */
+
+const memberGrid =
+    document.getElementById("memberGrid");
+
+const loadingState =
+    document.getElementById("loadingState");
+
+const emptyState =
+    document.getElementById("emptyState");
+
+const emptyTitle =
+    document.getElementById("emptyTitle");
+
+const emptyText =
+    document.getElementById("emptyText");
+
+const searchInput =
+    document.getElementById("searchInput");
+
+
+let allMembers = [];
+
+
+/* ================= LOAD MEMBERS ================= */
+
+async function loadMembers(){
+
+    loadingState.style.display = "block";
+    memberGrid.style.display = "none";
+    emptyState.style.display = "none";
+
+    const {
+        data,
+        error
+    } = await supabaseClient
+        .from("profiles")
+        .select(`
+            id,
+            username,
+            display_name,
+            role,
+            whatsapp,
+            description,
+            verified,
+            status,
+            created_at
+        `)
+        .eq("status", "TRUSTED")
+        .order("created_at", {
+            ascending:false
+        });
+
+    if(error){
+
+        console.error(
+            "Supabase error:",
+            error
+        );
+
+        loadingState.style.display = "none";
+
+        emptyTitle.textContent =
+            "Unable to load members";
+
+        emptyText.textContent =
+            "There was a problem connecting to the MTLS database.";
+
+        emptyState.style.display = "block";
+
+        return;
+    }
+
+    allMembers = data || [];
+
+    loadingState.style.display = "none";
+
+    renderMembers(allMembers);
+
+}
+
+
+/* ================= RENDER MEMBERS ================= */
+
+function renderMembers(members){
+
+    memberGrid.innerHTML = "";
+
+    if(!members.length){
+
+        memberGrid.style.display = "none";
+
+        emptyTitle.textContent =
+            searchInput.value.trim()
+                ? "No members found"
+                : "No trusted members yet";
+
+        emptyText.textContent =
+            searchInput.value.trim()
+                ? "Try searching with another username or display name."
+                : "The MTLS trusted list is currently empty. Verified members will appear here once they are added through the admin dashboard.";
+
+        emptyState.style.display = "block";
+
+        return;
+    }
+
+    emptyState.style.display = "none";
+
+    memberGrid.style.display = "grid";
+
+
+    members.forEach(member => {
+
+        const card =
+            document.createElement("div");
+
+        card.className =
+            "member-card";
+
+
+        const verifiedBadge =
+            member.verified
+                ? `
+                    <div class="verified">
+                        ✓ VERIFIED BY MTLS
+                    </div>
+                `
+                : "";
+
+
+        const whatsapp =
+            cleanWhatsApp(
+                member.whatsapp
+            );
+
+
+        const whatsappButton =
+            whatsapp
+                ? `
+                    <a
+                        class="member-btn whatsapp-btn"
+                        href="https://wa.me/${whatsapp}"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                    >
+                        WhatsApp
+                    </a>
+                `
+                : `
+                    <span
+                        class="member-btn whatsapp-btn"
+                        style="opacity:.4;cursor:not-allowed;"
+                    >
+                        No WhatsApp
+                    </span>
+                `;
+
+
+        card.innerHTML = `
+
+            <div class="member-top">
+
+                <div>
+
+                    <div class="member-name">
+                        ${escapeHTML(
+                            member.display_name ||
+                            member.username ||
+                            "Unnamed"
+                        )}
+                    </div>
+
+                    <div class="member-username">
+                        @${escapeHTML(
+                            member.username || "-"
+                        )}
+                    </div>
+
+                    ${verifiedBadge}
+
+                </div>
+
+                <div class="role">
+                    ${escapeHTML(
+                        member.role || "MEMBER"
+                    )}
+                </div>
+
+            </div>
+
+
+            <div class="member-desc">
+
+                ${escapeHTML(
+                    member.description ||
+                    "MTLS listed member."
+                )}
+
+            </div>
+
+
+            <div class="member-status trusted">
+
+                <span class="status-dot"></span>
+
+                TRUSTED
+
+            </div>
+
+
+            <div class="member-actions">
+
+                ${whatsappButton}
+
+                <a
+                    class="member-btn profile-btn"
+                    href="profile.html?id=${encodeURIComponent(member.id)}"
+                >
+                    View Profile
+                </a>
+
+            </div>
+
+        `;
+
+
+        memberGrid.appendChild(card);
+
+    });
+
+}
+
+
+/* ================= SEARCH ================= */
+
+searchInput.addEventListener(
+    "input",
+    function(){
+
+        const query =
+            this.value
+                .trim()
+                .toLowerCase();
+
+
+        if(!query){
+
+            renderMembers(allMembers);
+
+            return;
+
+        }
+
+
+        const filtered =
+            allMembers.filter(member => {
+
+                const username =
+                    String(
+                        member.username || ""
+                    ).toLowerCase();
+
+                const displayName =
+                    String(
+                        member.display_name || ""
+                    ).toLowerCase();
+
+                const role =
+                    String(
+                        member.role || ""
+                    ).toLowerCase();
+
+                return (
+                    username.includes(query) ||
+                    displayName.includes(query) ||
+                    role.includes(query)
+                );
+
+            });
+
+
+        renderMembers(filtered);
+
+    }
+);
+
+
+/* ================= WHATSAPP ================= */
+
+function cleanWhatsApp(number){
+
+    if(!number){
+        return "";
+    }
+
+    let value =
+        String(number)
+            .replace(/\D/g,"");
+
+
+    /*
+       Malaysia numbers:
+
+       0123456789
+       -> 60123456789
+
+       60123456789
+       -> stays the same
+    */
+
+    if(
+        value.startsWith("0")
+    ){
+
+        value =
+            "60" +
+            value.substring(1);
+
+    }
+
+    return value;
+
+}
+
+
+/* ================= HTML SECURITY ================= */
+
+function escapeHTML(value){
+
+    return String(value)
+        .replace(/&/g,"&amp;")
+        .replace(/</g,"&lt;")
+        .replace(/>/g,"&gt;")
+        .replace(/"/g,"&quot;")
+        .replace(/'/g,"&#039;");
+
+}
+
+
 /* ================= MOBILE MENU ================= */
 
 function toggleMenu(){
 
     const nav =
-        document.getElementById("navLinks");
+        document.getElementById(
+            "navLinks"
+        );
 
-    nav.classList.toggle("active");
+    nav.classList.toggle(
+        "active"
+    );
 
 }
 
-
-/* CLOSE MENU AFTER CLICK */
 
 document
     .querySelectorAll(".nav-links a")
@@ -879,8 +1420,12 @@ document
             () => {
 
                 document
-                    .getElementById("navLinks")
-                    .classList.remove("active");
+                    .getElementById(
+                        "navLinks"
+                    )
+                    .classList.remove(
+                        "active"
+                    );
 
             }
         );
@@ -888,25 +1433,9 @@ document
     });
 
 
-/* ================= SEARCH ================= */
+/* ================= START ================= */
 
-/*
-   Real members will be loaded from Supabase later.
-   Search logic will be connected once the member
-   cards are generated dynamically.
-*/
-
-const searchInput =
-    document.getElementById("searchInput");
-
-searchInput.addEventListener(
-    "input",
-    function(){
-
-        // Reserved for Supabase member search.
-
-    }
-);
+loadMembers();
 
 </script>
 
